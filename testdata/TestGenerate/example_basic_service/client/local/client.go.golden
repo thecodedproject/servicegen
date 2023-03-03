@@ -2,6 +2,7 @@ package local
 
 import (
 	context "context"
+	internal "github.com/thecodedproject/servicegen/example_basic_service/internal"
 	resource "my/resource"
 )
 
@@ -11,7 +12,9 @@ type client struct {
 
 func (c *client) Ping(ctx context.Context) (string, error) {
 
-	return internal.Ping()
+	return internal.Ping(
+		ctx,
+	)
 }
 
 func (c *client) Echo(
@@ -19,7 +22,10 @@ func (c *client) Echo(
 	reqMessage string,
 ) (string, error) {
 
-	return internal.Echo()
+	return internal.Echo(
+		ctx,
+		reqMessage,
+	)
 }
 
 func (c *client) UseManyTypes(
@@ -32,6 +38,14 @@ func (c *client) UseManyTypes(
 	six bool,
 ) (int32, int64, float64, string, []byte, bool, error) {
 
-	return internal.UseManyTypes()
+	return internal.UseManyTypes(
+		ctx,
+		one,
+		two,
+		three,
+		four,
+		five,
+		six,
+	)
 }
 

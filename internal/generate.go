@@ -35,8 +35,8 @@ func Generate() error {
 
 
 	return gopkg.LintAndGenerate([]gopkg.FileContents{
-		makeApiFile(s),
-		makeClientLocalClientFile(s),
+		fileApi(s),
+		fileClientLocalClient(s),
 	})
 }
 
@@ -129,24 +129,6 @@ func goTypeFromProtoType(
 
 	return gopkg.TypeUnknownNamed{
 		Name: protoType,
-	}
-}
-
-func makeApiFile(
-	s serviceDefinition,
-) gopkg.FileContents {
-
-	return gopkg.FileContents{
-		Filepath: "api.go",
-		PackageName: s.Name,
-		Types: []gopkg.DeclType{
-			{
-				Name: strcase.ToCamel(s.Name),
-				Type: gopkg.TypeInterface{
-					Funcs: s.ApiFuncs,
-				},
-			},
-		},
 	}
 }
 

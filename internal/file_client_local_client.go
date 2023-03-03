@@ -6,15 +6,15 @@ import (
 	"github.com/thecodedproject/gopkg"
 )
 
-func makeClientLocalClientFile(
+func fileClientLocalClient(
 	s serviceDefinition,
 ) gopkg.FileContents {
 
 	importPath := path.Join(s.ImportPath, "client", "local")
+	internalImportPath := path.Join(s.ImportPath, "internal")
 
 	funcs := make([]gopkg.DeclFunc, 0, len(s.ApiFuncs))
 	for _, f := range s.ApiFuncs {
-
 		f.Receiver = gopkg.FuncReceiver{
 			VarName: "c",
 			TypeName: "client",
@@ -22,9 +22,12 @@ func makeClientLocalClientFile(
 		}
 
 		f.BodyTmpl = `
-	return internal.{{.Func.Name}}()
+	return internal.{{.Func.Name}}(
+	{{- range .Func.Args}}
+		{{.Name}},
+	{{- end}}
+	)
 `
-
 		funcs = append(funcs, f)
 	}
 
@@ -32,6 +35,12 @@ func makeClientLocalClientFile(
 		Filepath: "client/local/client.go",
 		PackageName: "local",
 		PackageImportPath: importPath,
+		Imports: []gopkg.ImportAndAlias{
+			{
+				Alias: "internal",
+				Import: internalImportPath,
+			},
+		},
 		Types: []gopkg.DeclType{
 			{
 				Name: "client",
