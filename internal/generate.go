@@ -33,11 +33,19 @@ func Generate() error {
 		return err
 	}
 
-
-	return gopkg.LintAndGenerate([]gopkg.FileContents{
+	var files []gopkg.FileContents
+	files = append(
+		files,
 		fileApi(s),
 		fileClientLocalClient(s),
-	})
+	)
+
+	files = append(
+		files,
+		fileInternalFiles(s)...,
+	)
+
+	return gopkg.LintAndGenerate(files)
 }
 
 type serviceDefinition struct {

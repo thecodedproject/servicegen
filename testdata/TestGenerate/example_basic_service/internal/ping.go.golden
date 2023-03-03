@@ -1,0 +1,11 @@
+package basic
+
+import (
+	context "context"
+)
+
+func Ping(ctx context.Context) (string, error) {
+
+	return "", nil
+}
+

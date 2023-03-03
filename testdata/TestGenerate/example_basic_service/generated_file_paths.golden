@@ -1,2 +1,5 @@
 example_basic_service/api.go
 example_basic_service/client/local/client.go
+example_basic_service/internal/echo.go
+example_basic_service/internal/ping.go
+example_basic_service/internal/use_many_types.go

@@ -1,0 +1,19 @@
+package basic
+
+import (
+	context "context"
+)
+
+func UseManyTypes(
+	ctx context.Context,
+	one int32,
+	two int64,
+	three float64,
+	four string,
+	five []byte,
+	six bool,
+) (int32, int64, float64, string, []byte, bool, error) {
+
+	return 0, 0, 0, "", nil, false, nil
+}
+

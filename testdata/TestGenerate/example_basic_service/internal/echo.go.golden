@@ -1,0 +1,14 @@
+package basic
+
+import (
+	context "context"
+)
+
+func Echo(
+	ctx context.Context,
+	reqMessage string,
+) (string, error) {
+
+	return "", nil
+}
+

@@ -10,7 +10,6 @@ func fileClientLocalClient(
 	s serviceDefinition,
 ) gopkg.FileContents {
 
-	importPath := path.Join(s.ImportPath, "client", "local")
 	internalImportPath := path.Join(s.ImportPath, "internal")
 
 	funcs := make([]gopkg.DeclFunc, 0, len(s.ApiFuncs))
@@ -34,7 +33,6 @@ func fileClientLocalClient(
 	return gopkg.FileContents{
 		Filepath: "client/local/client.go",
 		PackageName: "local",
-		PackageImportPath: importPath,
 		Imports: []gopkg.ImportAndAlias{
 			{
 				Alias: "internal",
