@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package basicpb;
+
+option go_package = "github.com/thecodedproject/servicegen/example_basic_service";
+
+service Basic {
+  rpc Ping(PingRequest) returns (PingResponse) {}
+  rpc Echo(EchoRequest) returns (EchoResponse) {}
+  rpc UseManyTypes(UseManyTypesRequest) returns (UseManyTypesResponse) {}
+}
+
+message PingRequest {
+}
+
+message PingResponse {
+  string response = 1;
+}
+
+message EchoRequest {
+  string req_message = 1;
+}
+
+message EchoResponse {
+  string resp_message = 1;
+}
+
+message UseManyTypesRequest {
+  int32 one = 1;
+  int64 two = 2;
+  float three = 3;
+  string four = 4;
+  bytes five = 5;
+  bool six = 6;
+}
+
+message UseManyTypesResponse {
+  int32 one = 1;
+  int64 two = 2;
+  float three = 3;
+  string four = 4;
+  bytes five = 5;
+  bool six = 6;
+}

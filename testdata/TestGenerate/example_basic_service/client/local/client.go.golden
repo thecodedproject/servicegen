@@ -1,0 +1,37 @@
+package local
+
+import (
+	context "context"
+	resource "my/resource"
+)
+
+type client struct {
+	r resource.Resource
+}
+
+func (c *client) Ping(ctx context.Context) (string, error) {
+
+	return internal.Ping()
+}
+
+func (c *client) Echo(
+	ctx context.Context,
+	reqMessage string,
+) (string, error) {
+
+	return internal.Echo()
+}
+
+func (c *client) UseManyTypes(
+	ctx context.Context,
+	one int32,
+	two int64,
+	three float64,
+	four string,
+	five []byte,
+	six bool,
+) (int32, int64, float64, string, []byte, bool, error) {
+
+	return internal.UseManyTypes()
+}
+

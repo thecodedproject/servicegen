@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package examplepb;
+
+service Some {
+  rpc Ping (PingRequest) returns (PingResponse) {}
+
+	rpc Pong (PongRequest) returns (PongResponse) {}
+}
+
+message PingRequest {
+	int64 int64_value = 1;
+	string string_value = 2;
+}
+
+message PingResponse {}
+
+message PongRequest {}
+
+message PongResponse {
+	int64 int64_value = 1;
+	string string_value = 2;
+}
+

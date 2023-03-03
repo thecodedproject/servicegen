@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package nestedpb;
+
+service NestedService {
+  rpc Ping (PingRequest) returns (PingResponse) {}
+}
+
+message PingRequest {
+	NestedVal some_nested_value = 1;
+}
+
+message PingResponse {
+	OtherNestedVal some_other_value = 1;
+}
+
+message NestedVal {
+	int64 some_value = 1;
+}
+
+message OtherNestedVal {
+	string some_string = 1;
+}
+

@@ -1,3 +1,3 @@
-package example_basic_service
+package basic
 
-//go:generate go run ../main.go
+//go:generate go run ../main.go --proto basicpb/basic.proto
