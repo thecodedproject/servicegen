@@ -10,6 +10,13 @@ type client struct {
 	r resources.Resources
 }
 
+func New(r resources.Resources) *client {
+
+	return &client{
+		r: r,
+	}
+}
+
 func (c *client) Ping(ctx context.Context) (string, error) {
 
 	return internal.Ping(

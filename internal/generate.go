@@ -3,6 +3,7 @@ package internal
 import (
 	"errors"
 	"flag"
+	"path"
 
 	"github.com/iancoleman/strcase"
 	"github.com/thecodedproject/gopkg"
@@ -57,6 +58,7 @@ type serviceDefinition struct {
 	Name string
 	ImportPath string
 	ApiFuncs []gopkg.DeclFunc
+	ResourcesDecl gopkg.DeclVar
 }
 
 func createServiceDefinition(
@@ -73,10 +75,19 @@ func createServiceDefinition(
 		return serviceDefinition{}, err
 	}
 
+	resourcesImportPath := path.Join(importPath, "resources")
+
 	return serviceDefinition{
 		Name: strcase.ToSnake(apiProto.ServiceName),
 		ImportPath: importPath,
 		ApiFuncs: apiFuncs,
+		ResourcesDecl: gopkg.DeclVar{
+			Name: "r",
+			Type: gopkg.TypeNamed{
+				Name: "Resources",
+				Import: resourcesImportPath,
+			},
+		},
 	}, nil
 }
 

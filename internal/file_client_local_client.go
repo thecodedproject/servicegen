@@ -4,6 +4,7 @@ import (
 	"path"
 
 	"github.com/thecodedproject/gopkg"
+	"github.com/thecodedproject/gopkg/tmpl"
 )
 
 func fileClientLocalClient(
@@ -13,7 +14,26 @@ func fileClientLocalClient(
 	internalImportPath := path.Join(s.ImportPath, "internal")
 	resourcesImportPath := path.Join(s.ImportPath, "resources")
 
-	funcs := make([]gopkg.DeclFunc, 0, len(s.ApiFuncs))
+	funcs := []gopkg.DeclFunc{
+		{
+			Name: "New",
+			Args: []gopkg.DeclVar{
+				s.ResourcesDecl,
+			},
+			ReturnArgs: tmpl.UnnamedReturnArgs(
+				gopkg.TypePointer{
+					ValueType: gopkg.TypeNamed{
+						Name: "client",
+					},
+				},
+			),
+			BodyTmpl: `
+	return &client{
+		r: r,
+	}
+`,
+		},
+	}
 	for _, f := range s.ApiFuncs {
 		f.Receiver = gopkg.FuncReceiver{
 			VarName: "c",
