@@ -2,10 +2,12 @@ package basic
 
 import (
 	context "context"
+	resources "github.com/thecodedproject/servicegen/example_basic_service/resources"
 )
 
 func Echo(
 	ctx context.Context,
+	r resources.Resources,
 	reqMessage string,
 ) (string, error) {
 

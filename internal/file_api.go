@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"github.com/iancoleman/strcase"
 	"github.com/thecodedproject/gopkg"
 )
 
@@ -14,7 +13,7 @@ func fileApi(
 		PackageName: s.Name,
 		Types: []gopkg.DeclType{
 			{
-				Name: strcase.ToCamel(s.Name),
+				Name: "Client",
 				Type: gopkg.TypeInterface{
 					Funcs: s.ApiFuncs,
 				},

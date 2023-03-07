@@ -2,10 +2,12 @@ package basic
 
 import (
 	context "context"
+	resources "github.com/thecodedproject/servicegen/example_basic_service/resources"
 )
 
 func UseManyTypes(
 	ctx context.Context,
+	r resources.Resources,
 	one int32,
 	two int64,
 	three float64,

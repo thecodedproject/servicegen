@@ -2,9 +2,13 @@ package basic
 
 import (
 	context "context"
+	resources "github.com/thecodedproject/servicegen/example_basic_service/resources"
 )
 
-func Ping(ctx context.Context) (string, error) {
+func Ping(
+	ctx context.Context,
+	r resources.Resources,
+) (string, error) {
 
 	return "", nil
 }

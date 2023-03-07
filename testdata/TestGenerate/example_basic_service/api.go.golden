@@ -4,7 +4,7 @@ import (
 	context "context"
 )
 
-type Basic interface {
+type Client interface {
 	Ping(ctx context.Context) (string, error)
 	Echo(ctx context.Context, reqMessage string) (string, error)
 	UseManyTypes(ctx context.Context, one int32, two int64, three float64, four string, five []byte, six bool) (int32, int64, float64, string, []byte, bool, error)

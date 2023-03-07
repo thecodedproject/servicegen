@@ -45,6 +45,11 @@ func Generate() error {
 		fileInternalFiles(s)...,
 	)
 
+	files = append(
+		files,
+		fileClientTestFiles(s)...,
+	)
+
 	return gopkg.LintAndGenerate(files)
 }
 
@@ -96,7 +101,7 @@ func apiFuncSignatures(
 		funcs[iM] = tmpl.FuncWithContextAndError(
 			m.Name,
 			argsFromProtoMessage(reqMessage),
-			argsFromProtoMessage(respMessage),
+			unnamedArgsFromProtoMessage(respMessage),
 		)
 	}
 
@@ -112,6 +117,21 @@ func argsFromProtoMessage(
 	for iF, f := range m.Fields {
 		args[iF] = gopkg.DeclVar{
 			Name: strcase.ToLowerCamel(f.Name),
+			Type: goTypeFromProtoType(f.Type),
+		}
+	}
+
+	return args
+}
+
+func unnamedArgsFromProtoMessage(
+	m proto.Message,
+) []gopkg.DeclVar {
+
+	args := make([]gopkg.DeclVar, len(m.Fields))
+
+	for iF, f := range m.Fields {
+		args[iF] = gopkg.DeclVar{
 			Type: goTypeFromProtoType(f.Type),
 		}
 	}
@@ -135,7 +155,7 @@ func goTypeFromProtoType(
 	case "string": return gopkg.TypeString{}
 	}
 
-	return gopkg.TypeUnknownNamed{
+	return gopkg.TypeNamed{
 		Name: protoType,
 	}
 }

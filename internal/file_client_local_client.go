@@ -11,6 +11,7 @@ func fileClientLocalClient(
 ) gopkg.FileContents {
 
 	internalImportPath := path.Join(s.ImportPath, "internal")
+	resourcesImportPath := path.Join(s.ImportPath, "resources")
 
 	funcs := make([]gopkg.DeclFunc, 0, len(s.ApiFuncs))
 	for _, f := range s.ApiFuncs {
@@ -20,10 +21,11 @@ func fileClientLocalClient(
 			IsPointer: true,
 		}
 
+		f.BodyData = internalFuncCallParams(f.Args)
 		f.BodyTmpl = `
-	return internal.{{.Func.Name}}(
-	{{- range .Func.Args}}
-		{{.Name}},
+	return internal.{{.Name}}(
+	{{- range .BodyData}}
+		{{.}},
 	{{- end}}
 	)
 `
@@ -46,9 +48,9 @@ func fileClientLocalClient(
 					Fields: []gopkg.DeclVar{
 						{
 							Name: "r",
-							Type: gopkg.TypeUnknownNamed{
-								Name: "Resource",
-								Import: "my/resource",
+							Type: gopkg.TypeNamed{
+								Name: "Resources",
+								Import: resourcesImportPath,
 							},
 						},
 					},
@@ -57,4 +59,33 @@ func fileClientLocalClient(
 		},
 		Functions: funcs,
 	}
+}
+
+// internalFuncCallParams returns the parameter names needed to call
+// the internal function from the client function.
+//
+// The internal function will have the same parameters as ther api function
+// with addition of the service's resources struct at position two.
+// i.e. for an API func:
+//		Method(ctx, one, two)
+// the internal call will be
+//		internal.Method(ctx, c.r, one two)
+// where `c.r` is the resources struct coming from the function receiver
+// `c *Client`
+func internalFuncCallParams(
+	apiFuncArgs []gopkg.DeclVar,
+) []string {
+
+	params := make([]string, len(apiFuncArgs))
+	for i, arg := range apiFuncArgs {
+		params[i] = arg.Name
+	}
+
+	if len(params) < 2 {
+		return append(params, "c.r")
+	}
+
+	params = append(params[:2], params[1:]...)
+	params[1] = "c.r"
+	return params
 }

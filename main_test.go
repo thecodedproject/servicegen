@@ -88,7 +88,7 @@ func runGoTestAndCheckOutput(
 	testDir string,
 ) {
 
-	cmd := exec.Command("go", "test", "-v", "-count=1", "./" + testDir)
+	cmd := exec.Command("go", "test", "-v", "-count=1", "./" + testDir + "/...")
 
 	stdout, err := cmd.StdoutPipe()
 	require.NoError(t, err)

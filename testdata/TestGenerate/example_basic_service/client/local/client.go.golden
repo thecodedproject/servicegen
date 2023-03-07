@@ -3,17 +3,18 @@ package local
 import (
 	context "context"
 	internal "github.com/thecodedproject/servicegen/example_basic_service/internal"
-	resource "my/resource"
+	resources "github.com/thecodedproject/servicegen/example_basic_service/resources"
 )
 
 type client struct {
-	r resource.Resource
+	r resources.Resources
 }
 
 func (c *client) Ping(ctx context.Context) (string, error) {
 
 	return internal.Ping(
 		ctx,
+		c.r,
 	)
 }
 
@@ -24,6 +25,7 @@ func (c *client) Echo(
 
 	return internal.Echo(
 		ctx,
+		c.r,
 		reqMessage,
 	)
 }
@@ -40,6 +42,7 @@ func (c *client) UseManyTypes(
 
 	return internal.UseManyTypes(
 		ctx,
+		c.r,
 		one,
 		two,
 		three,
