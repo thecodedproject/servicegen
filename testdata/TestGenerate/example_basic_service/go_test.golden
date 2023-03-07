@@ -1,8 +1,19 @@
 ?   	github.com/thecodedproject/servicegen/example_basic_service	[no test files]
 ?   	github.com/thecodedproject/servicegen/example_basic_service/basicpb	[no test files]
 === RUN   TestClientLocal
-    suite.go:229: warning: no tests to run
+=== RUN   TestClientLocal/TestEcho
+=== RUN   TestClientLocal/TestEcho/empty
+=== RUN   TestClientLocal/TestPing
+=== RUN   TestClientLocal/TestPing/empty
+=== RUN   TestClientLocal/TestUseManyTypes
+=== RUN   TestClientLocal/TestUseManyTypes/empty
 --- PASS: TestClientLocal (X.XXs)
+    --- PASS: TestClientLocal/TestEcho (X.XXs)
+        --- PASS: TestClientLocal/TestEcho/empty (X.XXs)
+    --- PASS: TestClientLocal/TestPing (X.XXs)
+        --- PASS: TestClientLocal/TestPing/empty (X.XXs)
+    --- PASS: TestClientLocal/TestUseManyTypes (X.XXs)
+        --- PASS: TestClientLocal/TestUseManyTypes/empty (X.XXs)
 PASS
 ok  	github.com/thecodedproject/servicegen/example_basic_service/client	X.XXXs
 ?   	github.com/thecodedproject/servicegen/example_basic_service/client/local	[no test files]

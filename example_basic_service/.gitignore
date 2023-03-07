@@ -1,6 +1,6 @@
-example_basic_service/api.go
-example_basic_service/client/client_test.go
-example_basic_service/client/local/client.go
-example_basic_service/internal/echo.go
-example_basic_service/internal/ping.go
-example_basic_service/internal/use_many_types.go
+api.go
+client/client_*test.go
+client/local/client.go
+internal/echo.go
+internal/ping.go
+internal/use_many_types.go
