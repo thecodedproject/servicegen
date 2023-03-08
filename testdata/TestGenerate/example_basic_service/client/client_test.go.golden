@@ -2,7 +2,8 @@ package client_test
 
 import (
 	suite "github.com/stretchr/testify/suite"
-	example_basic_service "github.com/thecodedproject/servicegen/example_basic_service"
+	basic "github.com/thecodedproject/servicegen/example_basic_service"
+	client_local "github.com/thecodedproject/servicegen/example_basic_service/client/local"
 	resources "github.com/thecodedproject/servicegen/example_basic_service/resources"
 	testing "testing"
 )
@@ -10,7 +11,7 @@ import (
 type clientSuite struct {
 	suite.Suite
 
-	createClient func(resources.Resources) example_basic_service.Client
+	createClient func(resources.Resources) basic.Client
 }
 
 type TestClientLocalSuite struct {
@@ -19,9 +20,9 @@ type TestClientLocalSuite struct {
 
 func (ts *TestClientLocalSuite) SetupTest() {
 
-	//ts.createClient = func(r resources.Resources) example_import_path.Client {
-	//	return client_local.New(r)
-	//}
+	ts.createClient = func(r resources.Resources) basic.Client {
+		return client_local.New(r)
+	}
 }
 
 func TestClientLocal(t *testing.T) {

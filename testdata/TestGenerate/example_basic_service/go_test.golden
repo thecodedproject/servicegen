@@ -3,19 +3,32 @@
 === RUN   TestClientLocal
 === RUN   TestClientLocal/TestEcho
 === RUN   TestClientLocal/TestEcho/empty
+    client_echo_test.go:21: 
+        	Error Trace:	/Users/jonathancooper/code/codedproject/servicegen/example_basic_service/client/client_echo_test.go:21
+        	Error:      	TODO: Implement test...
+        	Test:       	TestClientLocal/TestEcho/empty
 === RUN   TestClientLocal/TestPing
 === RUN   TestClientLocal/TestPing/empty
+    client_ping_test.go:21: 
+        	Error Trace:	/Users/jonathancooper/code/codedproject/servicegen/example_basic_service/client/client_ping_test.go:21
+        	Error:      	TODO: Implement test...
+        	Test:       	TestClientLocal/TestPing/empty
 === RUN   TestClientLocal/TestUseManyTypes
 === RUN   TestClientLocal/TestUseManyTypes/empty
---- PASS: TestClientLocal (X.XXs)
-    --- PASS: TestClientLocal/TestEcho (X.XXs)
-        --- PASS: TestClientLocal/TestEcho/empty (X.XXs)
-    --- PASS: TestClientLocal/TestPing (X.XXs)
-        --- PASS: TestClientLocal/TestPing/empty (X.XXs)
-    --- PASS: TestClientLocal/TestUseManyTypes (X.XXs)
-        --- PASS: TestClientLocal/TestUseManyTypes/empty (X.XXs)
-PASS
-ok  	github.com/thecodedproject/servicegen/example_basic_service/client	X.XXXs
+    client_use_many_types_test.go:21: 
+        	Error Trace:	/Users/jonathancooper/code/codedproject/servicegen/example_basic_service/client/client_use_many_types_test.go:21
+        	Error:      	TODO: Implement test...
+        	Test:       	TestClientLocal/TestUseManyTypes/empty
+--- FAIL: TestClientLocal (X.XXs)
+    --- FAIL: TestClientLocal/TestEcho (X.XXs)
+        --- FAIL: TestClientLocal/TestEcho/empty (X.XXs)
+    --- FAIL: TestClientLocal/TestPing (X.XXs)
+        --- FAIL: TestClientLocal/TestPing/empty (X.XXs)
+    --- FAIL: TestClientLocal/TestUseManyTypes (X.XXs)
+        --- FAIL: TestClientLocal/TestUseManyTypes/empty (X.XXs)
+FAIL
+FAIL	github.com/thecodedproject/servicegen/example_basic_service/client	X.XXXs
 ?   	github.com/thecodedproject/servicegen/example_basic_service/client/local	[no test files]
 ?   	github.com/thecodedproject/servicegen/example_basic_service/internal	[no test files]
 ?   	github.com/thecodedproject/servicegen/example_basic_service/resources	[no test files]
+FAIL

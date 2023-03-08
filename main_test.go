@@ -105,8 +105,8 @@ func runGoTestAndCheckOutput(
 	errOutput, err := io.ReadAll(stderr)
 	require.NoError(t, err)
 
-	err = cmd.Wait()
-	require.NoError(t, err, string(testOutput) + string(errOutput))
+	_ = cmd.Wait()
+	testOutput = []byte(string(testOutput) + string(errOutput))
 
 	timeRegex1, err := regexp.Compile(`\([0-9]\.[0-9][0-9]s\)`)
 	require.NoError(t, err)
@@ -118,7 +118,7 @@ func runGoTestAndCheckOutput(
 
 	t.Run("go_test", func(t *testing.T) {
 		g := goldie.New(t)
-		g.Assert(t, t.Name(), testOutput)
+		g.Assert(t, t.Name(), []byte(testOutput))
 	})
 }
 

@@ -10,26 +10,43 @@ import (
 
 func fileClientTestFiles(
 	s serviceDefinition,
-) []gopkg.FileContents {
+) ([]gopkg.FileContents, error) {
 
 	files := []gopkg.FileContents{
 		fileClientTestCommon(s),
 	}
 
-	files = append(files, fileClientTestForAPIFuncs(s)...)
+	testFiles, err := fileClientTestForAPIFuncs(s)
+	if err != nil {
+		return nil, err
+	}
 
-	return files
+	files = append(files, testFiles...)
+
+	return files, nil
 }
 
 func fileClientTestCommon(
 	s serviceDefinition,
 ) gopkg.FileContents {
 
-	resourcesImportPath := path.Join(s.ImportPath, "resources")
-
 	return gopkg.FileContents{
 		Filepath: "client/client_test.go",
 		PackageName: "client_test",
+		Imports: []gopkg.ImportAndAlias{
+			{
+				Import: s.ImportPath,
+				Alias: s.Name,
+			},
+			{
+				Import: s.ResourcesImport,
+				Alias: "resources",
+			},
+			{
+				Import: path.Join(s.ImportPath, "client", "local"),
+				Alias: "client_local",
+			},
+		},
 		Types: []gopkg.DeclType{
 			{
 				Name: "clientSuite",
@@ -45,10 +62,7 @@ func fileClientTestCommon(
 							Name: "createClient",
 							Type: gopkg.TypeFunc{
 								Args: tmpl.UnnamedReturnArgs(
-									gopkg.TypeNamed{
-										Name: "Resources",
-										Import: resourcesImportPath,
-									},
+									s.ResourcesDecl.Type,
 								),
 								ReturnArgs: tmpl.UnnamedReturnArgs(
 									gopkg.TypeNamed{
@@ -78,9 +92,9 @@ func fileClientTestCommon(
 				Receiver: gopkg.FuncReceiver{"ts", "TestClientLocalSuite", true},
 				// TODO: insert imports + type names dynamically in this func body
 				BodyTmpl: `
-	//ts.createClient = func(r resources.Resources) example_import_path.Client {
-	//	return client_local.New(r)
-	//}
+	ts.createClient = func(r resources.Resources) basic.Client {
+		return client_local.New(r)
+	}
 `,
 			},
 			{
@@ -106,12 +120,11 @@ func fileClientTestCommon(
 
 func fileClientTestForAPIFuncs(
 	s serviceDefinition,
-) []gopkg.FileContents {
-
-	//resourcesImportPath := path.Join(s.ImportPath, "resources")
+) ([]gopkg.FileContents, error) {
 
 	files := make([]gopkg.FileContents, len(s.ApiFuncs))
 	for i, f := range s.ApiFuncs {
+
 		files[i] = gopkg.FileContents{
 			Filepath: "client/client_" + strcase.ToSnake(f.Name) + "_test.go",
 			PackageName: "client_test",
@@ -120,11 +133,16 @@ func fileClientTestForAPIFuncs(
 					Import: "testing",
 					Alias: "testing",
 				},
+				{
+					Import: "github.com/stretchr/testify/require",
+					Alias: "require",
+				},
 			},
 			Functions: []gopkg.DeclFunc{
 				{
 					Name: "Test" + strcase.ToCamel(f.Name),
 					Receiver: gopkg.FuncReceiver{"ts", "clientSuite", true},
+					BodyData: f,
 					BodyTmpl: `
 		testCases := []struct{
 			Name string
@@ -137,7 +155,14 @@ func fileClientTestForAPIFuncs(
 		for _, test := range testCases {
 			ts.T().Run(test.Name, func(t *testing.T) {
 
-				return
+				require.Fail(t, "TODO: Implement test...")
+				//c = ts.createClient(
+				//	resources.NewForTesting(t),
+				//)
+
+				//ctx := context.Background()
+				//..., err := c.{{.BodyData.Name}}(ctx, ...)
+				//require.NoError(t, err)
 			})
 		}
 	`,
@@ -146,5 +171,5 @@ func fileClientTestForAPIFuncs(
 		}
 	}
 
-	return files
+	return files, nil
 }

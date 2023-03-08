@@ -1,6 +1,7 @@
 package client_test
 
 import (
+	require "github.com/stretchr/testify/require"
 	testing "testing"
 )
 
@@ -17,7 +18,14 @@ func (ts *clientSuite) TestPing() {
 		for _, test := range testCases {
 			ts.T().Run(test.Name, func(t *testing.T) {
 
-				return
+				require.Fail(t, "TODO: Implement test...")
+				//c = ts.createClient(
+				//	resources.NewForTesting(t),
+				//)
+
+				//ctx := context.Background()
+				//..., err := c.Ping(ctx, ...)
+				//require.NoError(t, err)
 			})
 		}
 	}

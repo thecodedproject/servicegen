@@ -46,9 +46,14 @@ func Generate() error {
 		fileInternalFiles(s)...,
 	)
 
+	testFiles, err := fileClientTestFiles(s)
+	if err != nil {
+		return err
+	}
+
 	files = append(
 		files,
-		fileClientTestFiles(s)...,
+		testFiles...,
 	)
 
 	return gopkg.LintAndGenerate(files)
@@ -59,6 +64,7 @@ type serviceDefinition struct {
 	ImportPath string
 	ApiFuncs []gopkg.DeclFunc
 	ResourcesDecl gopkg.DeclVar
+	ResourcesImport string
 }
 
 func createServiceDefinition(
@@ -88,6 +94,7 @@ func createServiceDefinition(
 				Import: resourcesImportPath,
 			},
 		},
+		ResourcesImport: resourcesImportPath,
 	}, nil
 }
 
