@@ -10,20 +10,23 @@ import (
 
 func fileClientTestFiles(
 	s serviceDefinition,
-) ([]gopkg.FileContents, error) {
+) func() ([]gopkg.FileContents, error) {
 
-	files := []gopkg.FileContents{
-		fileClientTestCommon(s),
+
+	return func() ([]gopkg.FileContents, error) {
+		files := []gopkg.FileContents{
+			fileClientTestCommon(s),
+		}
+
+		testFiles, err := fileClientTestForAPIFuncs(s)
+		if err != nil {
+			return nil, err
+		}
+
+		files = append(files, testFiles...)
+
+		return files, nil
 	}
-
-	testFiles, err := fileClientTestForAPIFuncs(s)
-	if err != nil {
-		return nil, err
-	}
-
-	files = append(files, testFiles...)
-
-	return files, nil
 }
 
 func fileClientTestCommon(

@@ -9,75 +9,79 @@ import (
 
 func fileClientLocalClient(
 	s serviceDefinition,
-) gopkg.FileContents {
+) func() ([]gopkg.FileContents, error) {
 
-	internalImportPath := path.Join(s.ImportPath, "internal")
-	resourcesImportPath := path.Join(s.ImportPath, "resources")
+	return func() ([]gopkg.FileContents, error) {
+		internalImportPath := path.Join(s.ImportPath, "internal")
+		resourcesImportPath := path.Join(s.ImportPath, "resources")
 
-	funcs := []gopkg.DeclFunc{
-		{
-			Name: "New",
-			Args: []gopkg.DeclVar{
-				s.ResourcesDecl,
-			},
-			ReturnArgs: tmpl.UnnamedReturnArgs(
-				gopkg.TypePointer{
-					ValueType: gopkg.TypeNamed{
-						Name: "client",
-					},
+		funcs := []gopkg.DeclFunc{
+			{
+				Name: "New",
+				Args: []gopkg.DeclVar{
+					s.ResourcesDecl,
 				},
-			),
-			BodyTmpl: `
+				ReturnArgs: tmpl.UnnamedReturnArgs(
+					gopkg.TypePointer{
+						ValueType: gopkg.TypeNamed{
+							Name: "client",
+						},
+					},
+				),
+				BodyTmpl: `
 	return &client{
 		r: r,
 	}
 `,
-		},
-	}
-	for _, f := range s.ApiFuncs {
-		f.Receiver = gopkg.FuncReceiver{
-			VarName: "c",
-			TypeName: "client",
-			IsPointer: true,
+			},
 		}
+		for _, f := range s.ApiFuncs {
+			f.Receiver = gopkg.FuncReceiver{
+				VarName: "c",
+				TypeName: "client",
+				IsPointer: true,
+			}
 
-		f.BodyData = internalFuncCallParams(f.Args)
-		f.BodyTmpl = `
+			f.BodyData = internalFuncCallParams(f.Args)
+			f.BodyTmpl = `
 	return internal.{{.Name}}(
 	{{- range .BodyData}}
 		{{.}},
 	{{- end}}
 	)
 `
-		funcs = append(funcs, f)
-	}
+			funcs = append(funcs, f)
+		}
 
-	return gopkg.FileContents{
-		Filepath: "client/local/client.go",
-		PackageName: "local",
-		Imports: []gopkg.ImportAndAlias{
+		return []gopkg.FileContents{
 			{
-				Alias: "internal",
-				Import: internalImportPath,
-			},
-		},
-		Types: []gopkg.DeclType{
-			{
-				Name: "client",
-				Type: gopkg.TypeStruct{
-					Fields: []gopkg.DeclVar{
-						{
-							Name: "r",
-							Type: gopkg.TypeNamed{
-								Name: "Resources",
-								Import: resourcesImportPath,
+				Filepath: "client/local/client.go",
+				PackageName: "local",
+				Imports: []gopkg.ImportAndAlias{
+					{
+						Alias: "internal",
+						Import: internalImportPath,
+					},
+				},
+				Types: []gopkg.DeclType{
+					{
+						Name: "client",
+						Type: gopkg.TypeStruct{
+							Fields: []gopkg.DeclVar{
+								{
+									Name: "r",
+									Type: gopkg.TypeNamed{
+										Name: "Resources",
+										Import: resourcesImportPath,
+									},
+								},
 							},
 						},
 					},
 				},
+				Functions: funcs,
 			},
-		},
-		Functions: funcs,
+		}, nil
 	}
 }
 

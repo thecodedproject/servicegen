@@ -35,28 +35,34 @@ func Generate() error {
 	}
 
 	var files []gopkg.FileContents
-	files = append(
+	files, err = appendFileContents(
 		files,
 		fileApi(s),
 		fileClientLocalClient(s),
+		fileClientTestFiles(s),
+		fileInternalFiles(s),
 	)
-
-	files = append(
-		files,
-		fileInternalFiles(s)...,
-	)
-
-	testFiles, err := fileClientTestFiles(s)
 	if err != nil {
 		return err
 	}
 
-	files = append(
-		files,
-		testFiles...,
-	)
-
 	return gopkg.LintAndGenerate(files)
+}
+
+func appendFileContents(
+	files []gopkg.FileContents,
+	fileFuncs ...func() ([]gopkg.FileContents, error),
+) ([]gopkg.FileContents, error) {
+
+	for _, fileFunc := range fileFuncs {
+		newFiles, err := fileFunc()
+		if err != nil {
+			return nil, err
+		}
+
+		files = append(files, newFiles...)
+	}
+	return files, nil
 }
 
 type serviceDefinition struct {

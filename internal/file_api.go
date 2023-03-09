@@ -6,19 +6,23 @@ import (
 
 func fileApi(
 	s serviceDefinition,
-) gopkg.FileContents {
+) func() ([]gopkg.FileContents, error) {
 
-	return gopkg.FileContents{
-		Filepath: "api.go",
-		PackageName: s.Name,
-		Types: []gopkg.DeclType{
+	return func() ([]gopkg.FileContents, error) {
+		return []gopkg.FileContents{
 			{
-				Name: "Client",
-				Type: gopkg.TypeInterface{
-					Funcs: s.ApiFuncs,
+				Filepath: "api.go",
+				PackageName: s.Name,
+				Types: []gopkg.DeclType{
+					{
+						Name: "Client",
+						Type: gopkg.TypeInterface{
+							Funcs: s.ApiFuncs,
+						},
+					},
 				},
 			},
-		},
+		}, nil
 	}
 }
 
