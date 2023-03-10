@@ -1,0 +1,19 @@
+package server
+
+import (
+	resources "github.com/thecodedproject/servicegen/example_basic_service/resources"
+)
+
+type GRPCServer struct {
+	r resources.Resources
+}
+
+func (s *GRPCServer) Ping() {
+}
+
+func (s *GRPCServer) Echo() {
+}
+
+func (s *GRPCServer) UseManyTypes() {
+}
+

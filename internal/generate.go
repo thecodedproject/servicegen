@@ -42,6 +42,7 @@ func Generate() error {
 		fileClientTestFiles(s),
 		fileInternalFiles(s),
 		fileResources(s),
+		fileServerGrpcServer(s),
 	)
 	if err != nil {
 		return err

@@ -9,3 +9,4 @@ example_basic_service/internal/ping.go
 example_basic_service/internal/use_many_types.go
 example_basic_service/resources/resources.go
 example_basic_service/resources/resources_impl.go
+example_basic_service/server/grpc_server.go
