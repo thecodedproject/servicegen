@@ -28,6 +28,7 @@
         --- FAIL: TestClientLocal/TestUseManyTypes/empty (X.XXs)
 FAIL
 FAIL	github.com/thecodedproject/servicegen/example_basic_service/client	X.XXXs
+?   	github.com/thecodedproject/servicegen/example_basic_service/client/grpc	[no test files]
 ?   	github.com/thecodedproject/servicegen/example_basic_service/client/local	[no test files]
 ?   	github.com/thecodedproject/servicegen/example_basic_service/internal	[no test files]
 ?   	github.com/thecodedproject/servicegen/example_basic_service/resources	[no test files]

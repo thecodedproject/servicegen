@@ -14,7 +14,7 @@ require (
 	github.com/iancoleman/strcase v0.2.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sergi/go-diff v1.0.0 // indirect
-	github.com/thecodedproject/gopkg v0.0.0-20230310132846-569b3cf0756a // indirect
+	github.com/thecodedproject/gopkg v0.0.0-20230310144225-51cb9345b0da // indirect
 	golang.org/x/net v0.5.0 // indirect
 	golang.org/x/sys v0.4.0 // indirect
 	golang.org/x/text v0.6.0 // indirect

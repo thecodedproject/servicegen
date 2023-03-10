@@ -1,0 +1,79 @@
+package grpc
+
+import (
+	context "context"
+	basicpb "github.com/thecodedproject/servicegen/example_basic_service/basicpb"
+	grpc "google.golang.org/grpc"
+)
+
+type grpcClient struct {
+	rpcConn grpc.ClientConn
+	rpcClient basicpb.BasicClient
+}
+
+func (c *grpcClient) Ping(ctx context.Context) (string, error) {
+
+
+
+	res, err := c.rpcClient.Ping(
+		ctx,
+		&basicpb.PingRequest{
+		},
+	)
+	if err != nil {
+		return "", err
+	}
+
+	return res.Response, nil
+}
+
+func (c *grpcClient) Echo(
+	ctx context.Context,
+	reqMessage string,
+) (string, error) {
+
+
+
+	res, err := c.rpcClient.Echo(
+		ctx,
+		&basicpb.EchoRequest{
+			ReqMessage: reqMessage,
+		},
+	)
+	if err != nil {
+		return "", err
+	}
+
+	return res.RespMessage, nil
+}
+
+func (c *grpcClient) UseManyTypes(
+	ctx context.Context,
+	one int32,
+	two int64,
+	three float32,
+	four string,
+	five []byte,
+	six bool,
+) (int32, int64, float32, string, []byte, bool, error) {
+
+
+
+	res, err := c.rpcClient.UseManyTypes(
+		ctx,
+		&basicpb.UseManyTypesRequest{
+			One: one,
+			Two: two,
+			Three: three,
+			Four: four,
+			Five: five,
+			Six: six,
+		},
+	)
+	if err != nil {
+		return 0, 0, 0, "", nil, false, err
+	}
+
+	return res.One, res.Two, res.Three, res.Four, res.Five, res.Six, nil
+}
+

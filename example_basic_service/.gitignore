@@ -3,6 +3,7 @@ client/client_echo_test.go
 client/client_ping_test.go
 client/client_test.go
 client/client_use_many_types_test.go
+client/grpc/grpc_client.go
 client/local/client.go
 internal/echo.go
 internal/ping.go

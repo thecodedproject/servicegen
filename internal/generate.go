@@ -38,6 +38,7 @@ func Generate() error {
 	files, err = appendFileContents(
 		files,
 		fileApi(s),
+		fileClientGrpcClient(s),
 		fileClientLocalClient(s),
 		fileClientTestFiles(s),
 		fileInternalFiles(s),

@@ -3,6 +3,7 @@ example_basic_service/client/client_echo_test.go
 example_basic_service/client/client_ping_test.go
 example_basic_service/client/client_test.go
 example_basic_service/client/client_use_many_types_test.go
+example_basic_service/client/grpc/grpc_client.go
 example_basic_service/client/local/client.go
 example_basic_service/internal/echo.go
 example_basic_service/internal/ping.go
