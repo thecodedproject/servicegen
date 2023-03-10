@@ -1,6 +1,12 @@
 api.go
-client/client_*test.go
+client/client_echo_test.go
+client/client_ping_test.go
+client/client_test.go
+client/client_use_many_types_test.go
 client/local/client.go
 internal/echo.go
 internal/ping.go
 internal/use_many_types.go
+resources/resources.go
+resources/resources_impl.go
+server/grpc_server.go

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package basicpb;
 
-option go_package = "github.com/thecodedproject/servicegen/example_basic_service";
+option go_package = "github.com/thecodedproject/servicegen/example_basic_service/basicpb";
 
 service Basic {
   rpc Ping(PingRequest) returns (PingResponse) {}

@@ -1,6 +1,8 @@
 package server
 
 import (
+	context "context"
+	basicpb "github.com/thecodedproject/servicegen/example_basic_service/basicpb"
 	resources "github.com/thecodedproject/servicegen/example_basic_service/resources"
 )
 
@@ -8,12 +10,27 @@ type GRPCServer struct {
 	r resources.Resources
 }
 
-func (s *GRPCServer) Ping() {
+func (s *GRPCServer) Ping(
+	ctx context.Context,
+	req *basicpb.PingRequest,
+) (*basicpb.PingResponse, error) {
+
+	return nil, nil
 }
 
-func (s *GRPCServer) Echo() {
+func (s *GRPCServer) Echo(
+	ctx context.Context,
+	req *basicpb.EchoRequest,
+) (*basicpb.EchoResponse, error) {
+
+	return nil, nil
 }
 
-func (s *GRPCServer) UseManyTypes() {
+func (s *GRPCServer) UseManyTypes(
+	ctx context.Context,
+	req *basicpb.UseManyTypesRequest,
+) (*basicpb.UseManyTypesResponse, error) {
+
+	return nil, nil
 }
 
