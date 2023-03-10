@@ -1,0 +1,9 @@
+package resources
+
+type resources struct {}
+
+func New() *resources {
+
+	return &resources{}
+}
+

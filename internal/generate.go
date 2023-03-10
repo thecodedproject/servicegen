@@ -41,6 +41,7 @@ func Generate() error {
 		fileClientLocalClient(s),
 		fileClientTestFiles(s),
 		fileInternalFiles(s),
+		fileResources(s),
 	)
 	if err != nil {
 		return err
@@ -98,6 +99,7 @@ func createServiceDefinition(
 			Type: gopkg.TypeNamed{
 				Name: "Resources",
 				Import: resourcesImportPath,
+				ValueType: gopkg.TypeInterface{},
 			},
 		},
 		ResourcesImport: resourcesImportPath,
