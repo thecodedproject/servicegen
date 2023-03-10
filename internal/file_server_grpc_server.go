@@ -1,9 +1,6 @@
 package internal
 
 import (
-	"path"
-
-	"github.com/iancoleman/strcase"
 	"github.com/thecodedproject/gopkg"
 	"github.com/thecodedproject/gopkg/tmpl"
 )
@@ -14,7 +11,6 @@ func fileServerGrpcServer(
 
 	return func() ([]gopkg.FileContents, error) {
 
-
 		serverFuncs, err := makeServerFuncs(s)
 		if err != nil {
 			return nil, err
@@ -24,6 +20,9 @@ func fileServerGrpcServer(
 			{
 				Filepath: "server/grpc_server.go",
 				PackageName: "server",
+				Imports: []gopkg.ImportAndAlias{
+					s.InternalImport,
+				},
 				Types: []gopkg.DeclType{
 					{
 						Name: "GRPCServer",
@@ -44,8 +43,6 @@ func makeServerFuncs(
 	s serviceDefinition,
 ) ([]gopkg.DeclFunc, error) {
 
-	pbImport := path.Join(s.ImportPath, strcase.ToSnake(s.Name) + "pb")
-
 	serverFuncs := make([]gopkg.DeclFunc, 0, len(s.ApiFuncs))
 	for _, f := range s.ApiFuncs {
 
@@ -57,7 +54,7 @@ func makeServerFuncs(
 					Type: gopkg.TypePointer{
 						ValueType: gopkg.TypeNamed{
 							Name: f.Name + "Request",
-							Import: pbImport,
+							Import: s.PbImport.Import,
 							ValueType: gopkg.TypeStruct{},
 						},
 					},
@@ -67,7 +64,7 @@ func makeServerFuncs(
 				gopkg.TypePointer{
 					ValueType: gopkg.TypeNamed{
 						Name: f.Name + "Response",
-						Import: pbImport,
+						Import: s.PbImport.Import,
 						ValueType: gopkg.TypeStruct{},
 					},
 				},
@@ -78,8 +75,45 @@ func makeServerFuncs(
 		f.Receiver.TypeName = "GRPCServer"
 		f.Receiver.IsPointer = true
 
+		reqMessage, err := s.ApiProto.MethodRequestMessage(f.Name)
+		if err != nil {
+			return nil, err
+		}
+
+		respMessage, err := s.ApiProto.MethodResponseMessage(f.Name)
+		if err != nil {
+			return nil, err
+		}
+
+		f.BodyData = struct{
+			PbAlias string
+			RespName string
+			ReqArgNames []string
+			RespArgNames []string
+		}{
+			PbAlias: s.PbImport.Alias,
+			RespName: respMessage.Name,
+			ReqArgNames: reqMessage.FieldNames(),
+			RespArgNames: respMessage.FieldNames(),
+		}
 		f.BodyTmpl = `
-	{{FuncReturnDefaults}}
+
+	{{range .BodyData.RespArgNames}}{{ToLowerCamel .}}, {{end}}err := internal.{{.Name}}(
+		ctx,
+		s.r,
+{{- range .BodyData.ReqArgNames}}
+		req.{{ToCamel .}},
+{{- end}}
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &{{.BodyData.PbAlias}}.{{.BodyData.RespName}}{
+{{- range .BodyData.RespArgNames}}
+		{{ToCamel .}}: {{ToLowerCamel .}},
+{{- end}}
+	}, nil
 `
 
 		serverFuncs = append(serverFuncs, f)

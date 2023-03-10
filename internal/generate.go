@@ -72,7 +72,12 @@ type serviceDefinition struct {
 	ImportPath string
 	ApiFuncs []gopkg.DeclFunc
 	ResourcesDecl gopkg.DeclVar
-	ResourcesImport string
+	ApiProto proto.Service
+
+	ClientImport gopkg.ImportAndAlias
+	InternalImport gopkg.ImportAndAlias
+	PbImport gopkg.ImportAndAlias
+	ResourcesImport gopkg.ImportAndAlias
 }
 
 func createServiceDefinition(
@@ -89,21 +94,27 @@ func createServiceDefinition(
 		return serviceDefinition{}, err
 	}
 
-	resourcesImportPath := path.Join(importPath, "resources")
+	resImp := makeImportWithAlias(importPath, "resources")
+
+	sName := strcase.ToSnake(apiProto.ServiceName)
 
 	return serviceDefinition{
-		Name: strcase.ToSnake(apiProto.ServiceName),
+		Name: sName,
 		ImportPath: importPath,
 		ApiFuncs: apiFuncs,
 		ResourcesDecl: gopkg.DeclVar{
 			Name: "r",
 			Type: gopkg.TypeNamed{
 				Name: "Resources",
-				Import: resourcesImportPath,
+				Import: resImp.Import,
 				ValueType: gopkg.TypeInterface{},
 			},
 		},
-		ResourcesImport: resourcesImportPath,
+		ApiProto: apiProto,
+		ClientImport: makeImportWithAlias(importPath, "client"),
+		InternalImport: makeImportWithAlias(importPath, "internal"),
+		PbImport: makeImportWithAlias(importPath, sName + "pb"),
+		ResourcesImport: resImp,
 	}, nil
 }
 
@@ -133,6 +144,18 @@ func apiFuncSignatures(
 	}
 
 	return funcs, nil
+}
+
+func makeImportWithAlias(
+	baseImportPath string,
+	subPath string,
+) gopkg.ImportAndAlias {
+
+	i := path.Join(baseImportPath, subPath)
+	return gopkg.ImportAndAlias{
+		Import: i,
+		Alias: subPath,
+	}
 }
 
 func argsFromProtoMessage(
@@ -176,7 +199,7 @@ func goTypeFromProtoType(
 		return gopkg.TypeArray{
 			ValueType: gopkg.TypeByte{},
 		}
-	case "float": return gopkg.TypeFloat64{}
+	case "float": return gopkg.TypeFloat32{}
 	case "int32": return gopkg.TypeInt32{}
 	case "int64": return gopkg.TypeInt64{}
 	case "string": return gopkg.TypeString{}

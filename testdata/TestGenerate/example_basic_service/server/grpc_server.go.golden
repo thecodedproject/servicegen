@@ -3,6 +3,7 @@ package server
 import (
 	context "context"
 	basicpb "github.com/thecodedproject/servicegen/example_basic_service/basicpb"
+	internal "github.com/thecodedproject/servicegen/example_basic_service/internal"
 	resources "github.com/thecodedproject/servicegen/example_basic_service/resources"
 )
 
@@ -15,7 +16,18 @@ func (s *GRPCServer) Ping(
 	req *basicpb.PingRequest,
 ) (*basicpb.PingResponse, error) {
 
-	return nil, nil
+
+	response, err := internal.Ping(
+		ctx,
+		s.r,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &basicpb.PingResponse{
+		Response: response,
+	}, nil
 }
 
 func (s *GRPCServer) Echo(
@@ -23,7 +35,19 @@ func (s *GRPCServer) Echo(
 	req *basicpb.EchoRequest,
 ) (*basicpb.EchoResponse, error) {
 
-	return nil, nil
+
+	respMessage, err := internal.Echo(
+		ctx,
+		s.r,
+		req.ReqMessage,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &basicpb.EchoResponse{
+		RespMessage: respMessage,
+	}, nil
 }
 
 func (s *GRPCServer) UseManyTypes(
@@ -31,6 +55,28 @@ func (s *GRPCServer) UseManyTypes(
 	req *basicpb.UseManyTypesRequest,
 ) (*basicpb.UseManyTypesResponse, error) {
 
-	return nil, nil
+
+	one, two, three, four, five, six, err := internal.UseManyTypes(
+		ctx,
+		s.r,
+		req.One,
+		req.Two,
+		req.Three,
+		req.Four,
+		req.Five,
+		req.Six,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &basicpb.UseManyTypesResponse{
+		One: one,
+		Two: two,
+		Three: three,
+		Four: four,
+		Five: five,
+		Six: six,
+	}, nil
 }
 

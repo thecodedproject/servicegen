@@ -41,10 +41,7 @@ func fileClientTestCommon(
 				Import: s.ImportPath,
 				Alias: s.Name,
 			},
-			{
-				Import: s.ResourcesImport,
-				Alias: "resources",
-			},
+			s.ResourcesImport,
 			{
 				Import: path.Join(s.ImportPath, "client", "local"),
 				Alias: "client_local",
