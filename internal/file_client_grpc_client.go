@@ -3,6 +3,7 @@ package internal
 import (
 	"github.com/iancoleman/strcase"
 	"github.com/thecodedproject/gopkg"
+	"github.com/thecodedproject/gopkg/tmpl"
 )
 
 func fileClientGrpcClient(
@@ -22,6 +23,17 @@ func fileClientGrpcClient(
 				PackageName: "grpc",
 				Imports: []gopkg.ImportAndAlias{
 					s.PbImport,
+					{ Import: "errors" },
+					{ Import: "flag" },
+					{ Import: "time" },
+					{ Import: "google.golang.org/grpc/connectivity" },
+				},
+				Vars: []gopkg.DeclVar{
+					{
+						Name: "address",
+						Type: gopkg.TypeUnnamedLiteral{},
+						LiteralValue: `flag.String("` + s.Name + `_grpc_address", "", "host:port of ` + s.Name + ` gRPC service")`,
+					},
 				},
 				Types: []gopkg.DeclType{
 					{
@@ -30,9 +42,11 @@ func fileClientGrpcClient(
 							Fields: []gopkg.DeclVar{
 								{
 									Name: "rpcConn",
-									Type: gopkg.TypeNamed{
-										Name: "ClientConn",
-										Import: "google.golang.org/grpc",
+									Type: gopkg.TypePointer{
+										ValueType: gopkg.TypeNamed{
+											Name: "ClientConn",
+											Import: "google.golang.org/grpc",
+										},
 									},
 								},
 								{
@@ -56,7 +70,84 @@ func makeGrpcClientFuncs(
 	s serviceDefinition,
 ) ([]gopkg.DeclFunc, error) {
 
-	clientFuncs := make([]gopkg.DeclFunc, 0, len(s.ApiFuncs))
+	pbNewClientFunc := s.PbImport.Alias + ".New" + strcase.ToCamel(s.Name) + "Client"
+
+	clientFuncs := make([]gopkg.DeclFunc, 0, len(s.ApiFuncs)+2)
+	clientFuncs = append(
+		clientFuncs,
+		gopkg.DeclFunc{
+			Name: "New",
+			ReturnArgs: tmpl.UnnamedReturnArgs(
+				gopkg.TypePointer{
+					ValueType: gopkg.TypeNamed{
+						Name: "grpcClient",
+					},
+				},
+				gopkg.TypeError{},
+			),
+			BodyTmpl: `
+	conn, err := grpc.Dial(*address, grpc.WithInsecure())
+	if err != nil {
+		{{FuncReturnDefaultsWithErr}}
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	for {
+		if conn.GetState() == connectivity.Ready {
+			break
+		}
+		if !conn.WaitForStateChange(ctx, conn.GetState()) {
+			err := errors.New("grpc timeout whilst connecting")
+			{{FuncReturnDefaultsWithErr}}
+		}
+	}
+
+	return &grpcClient{
+		rpcConn: conn,
+		rpcClient: ` + pbNewClientFunc + `(conn),
+	}, nil
+`,
+		},
+		gopkg.DeclFunc{
+			Name: "NewForTesting",
+			Args: []gopkg.DeclVar{
+				{
+					Name: "_",
+					Type: gopkg.TypePointer{
+						ValueType: gopkg.TypeNamed{
+							Name: "T",
+							Import: "testing",
+						},
+					},
+				},
+				{
+					Name: "conn",
+					Type: gopkg.TypePointer{
+						ValueType: gopkg.TypeNamed{
+							Name: "ClientConn",
+							Import: "google.golang.org/grpc",
+						},
+					},
+				},
+			},
+			ReturnArgs: tmpl.UnnamedReturnArgs(
+				gopkg.TypePointer{
+					ValueType: gopkg.TypeNamed{
+						Name: "grpcClient",
+					},
+				},
+			),
+			BodyTmpl: `
+	return &grpcClient{
+		rpcConn: conn,
+		rpcClient: ` + pbNewClientFunc + `(conn),
+	}
+`,
+		},
+	)
+
 	for _, f := range s.ApiFuncs {
 
 		f.Receiver.VarName = "c"
@@ -85,7 +176,6 @@ func makeGrpcClientFuncs(
 			RespArgNames: respMessage.FieldNames(),
 		}
 		f.BodyTmpl = `
-
 
 	res, err := c.rpcClient.{{.Name}}(
 		ctx,
