@@ -4,7 +4,7 @@ import (
 	context "context"
 	errors "errors"
 	flag "flag"
-	basicpb "github.com/thecodedproject/servicegen/example_basic_service/basicpb"
+	pb "github.com/thecodedproject/servicegen/example_basic_service/pb"
 	grpc "google.golang.org/grpc"
 	connectivity "google.golang.org/grpc/connectivity"
 	testing "testing"
@@ -15,7 +15,7 @@ var address = flag.String("basic_grpc_address", "", "host:port of basic gRPC ser
 
 type grpcClient struct {
 	rpcConn *grpc.ClientConn
-	rpcClient basicpb.BasicClient
+	rpcClient pb.BasicClient
 }
 
 func New() (*grpcClient, error) {
@@ -40,7 +40,7 @@ func New() (*grpcClient, error) {
 
 	return &grpcClient{
 		rpcConn: conn,
-		rpcClient: basicpb.NewBasicClient(conn),
+		rpcClient: pb.NewBasicClient(conn),
 	}, nil
 }
 
@@ -51,7 +51,7 @@ func NewForTesting(
 
 	return &grpcClient{
 		rpcConn: conn,
-		rpcClient: basicpb.NewBasicClient(conn),
+		rpcClient: pb.NewBasicClient(conn),
 	}
 }
 
@@ -60,7 +60,7 @@ func (c *grpcClient) Ping(ctx context.Context) (string, error) {
 
 	res, err := c.rpcClient.Ping(
 		ctx,
-		&basicpb.PingRequest{
+		&pb.PingRequest{
 		},
 	)
 	if err != nil {
@@ -78,7 +78,7 @@ func (c *grpcClient) Echo(
 
 	res, err := c.rpcClient.Echo(
 		ctx,
-		&basicpb.EchoRequest{
+		&pb.EchoRequest{
 			ReqMessage: reqMessage,
 		},
 	)
@@ -102,7 +102,7 @@ func (c *grpcClient) UseManyTypes(
 
 	res, err := c.rpcClient.UseManyTypes(
 		ctx,
-		&basicpb.UseManyTypesRequest{
+		&pb.UseManyTypesRequest{
 			One: one,
 			Two: two,
 			Three: three,

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.3
-// source: basicpb/basic.proto
+// source: api.proto
 
 package basicpb
 
@@ -173,5 +173,5 @@ var Basic_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "basicpb/basic.proto",
+	Metadata: "api.proto",
 }

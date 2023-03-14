@@ -114,7 +114,7 @@ func createServiceDefinition(
 		ApiProto: apiProto,
 		ClientImport: makeImportWithAlias(importPath, "client"),
 		InternalImport: makeImportWithAlias(importPath, "internal"),
-		PbImport: makeImportWithAlias(importPath, sName + "pb"),
+		PbImport: makeImportWithAlias(importPath, "pb"),
 		ResourcesImport: resImp,
 	}, nil
 }

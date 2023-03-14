@@ -5,9 +5,9 @@ import (
 	require "github.com/stretchr/testify/require"
 	suite "github.com/stretchr/testify/suite"
 	basic "github.com/thecodedproject/servicegen/example_basic_service"
-	basicpb "github.com/thecodedproject/servicegen/example_basic_service/basicpb"
 	client_grpc "github.com/thecodedproject/servicegen/example_basic_service/client/grpc"
 	client_local "github.com/thecodedproject/servicegen/example_basic_service/client/local"
+	pb "github.com/thecodedproject/servicegen/example_basic_service/pb"
 	resources "github.com/thecodedproject/servicegen/example_basic_service/resources"
 	server "github.com/thecodedproject/servicegen/example_basic_service/server"
 	grpc "google.golang.org/grpc"
@@ -93,7 +93,7 @@ func setupGRPCServer(
 	t.Cleanup(grpcSrv.GracefulStop)
 
 	service := server.New(r)
-	basicpb.RegisterBasicServer(grpcSrv, service)
+	pb.RegisterBasicServer(grpcSrv, service)
 
 	go func() {
 		err := grpcSrv.Serve(listener)
