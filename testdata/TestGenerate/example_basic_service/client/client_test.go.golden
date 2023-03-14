@@ -1,11 +1,20 @@
 package client_test
 
 import (
+	context "context"
+	require "github.com/stretchr/testify/require"
 	suite "github.com/stretchr/testify/suite"
 	basic "github.com/thecodedproject/servicegen/example_basic_service"
+	basicpb "github.com/thecodedproject/servicegen/example_basic_service/basicpb"
+	client_grpc "github.com/thecodedproject/servicegen/example_basic_service/client/grpc"
 	client_local "github.com/thecodedproject/servicegen/example_basic_service/client/local"
 	resources "github.com/thecodedproject/servicegen/example_basic_service/resources"
+	server "github.com/thecodedproject/servicegen/example_basic_service/server"
+	grpc "google.golang.org/grpc"
+	connectivity "google.golang.org/grpc/connectivity"
+	net "net"
 	testing "testing"
+	time "time"
 )
 
 type clientSuite struct {
@@ -18,6 +27,10 @@ type TestClientLocalSuite struct {
 	clientSuite
 }
 
+type TestClientGRPCSuite struct {
+	clientSuite
+}
+
 func (ts *TestClientLocalSuite) SetupTest() {
 
 	ts.createClient = func(r resources.Resources) basic.Client {
@@ -25,8 +38,68 @@ func (ts *TestClientLocalSuite) SetupTest() {
 	}
 }
 
+func (ts *TestClientGRPCSuite) SetupTest() {
+
+	ts.createClient = func(r resources.Resources) basic.Client {
+		return setupGRPCClient(ts.T(), r)
+	}
+}
+
 func TestClientLocal(t *testing.T) {
 
 	suite.Run(t, new(TestClientLocalSuite))
+}
+
+func TestClientGRPC(t *testing.T) {
+
+	suite.Run(t, new(TestClientGRPCSuite))
+}
+
+func setupGRPCClient(
+	t *testing.T,
+	r resources.Resources,
+) basic.Client {
+
+	serverAddr := setupGRPCServer(t, r)
+	conn, err := grpc.Dial(serverAddr, grpc.WithInsecure())
+	require.NoError(t, err)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	for {
+		if conn.GetState() == connectivity.Ready {
+			break
+		}
+
+		if !conn.WaitForStateChange(ctx, conn.GetState()) {
+			require.Fail(t, "grpc timeout whilst connecting")
+		}
+	}
+
+	client := client_grpc.NewForTesting(t, conn)
+	return client
+}
+
+func setupGRPCServer(
+	t *testing.T,
+	r resources.Resources,
+) string {
+
+	listener, err := net.Listen("tcp", "localhost:0")
+	require.NoError(t, err)
+
+	grpcSrv := grpc.NewServer()
+	t.Cleanup(grpcSrv.GracefulStop)
+
+	service := server.New(r)
+	basicpb.RegisterBasicServer(grpcSrv, service)
+
+	go func() {
+		err := grpcSrv.Serve(listener)
+		require.NoError(t, err)
+	}()
+
+	return listener.Addr().String()
 }
 

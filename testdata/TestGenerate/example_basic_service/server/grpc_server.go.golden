@@ -7,11 +7,20 @@ import (
 	resources "github.com/thecodedproject/servicegen/example_basic_service/resources"
 )
 
-type GRPCServer struct {
+type grpcServer struct {
+	basicpb.UnimplementedBasicServer
+
 	r resources.Resources
 }
 
-func (s *GRPCServer) Ping(
+func New(r resources.Resources) *grpcServer {
+
+	return &grpcServer{
+		r: r,
+	}
+}
+
+func (s *grpcServer) Ping(
 	ctx context.Context,
 	req *basicpb.PingRequest,
 ) (*basicpb.PingResponse, error) {
@@ -30,7 +39,7 @@ func (s *GRPCServer) Ping(
 	}, nil
 }
 
-func (s *GRPCServer) Echo(
+func (s *grpcServer) Echo(
 	ctx context.Context,
 	req *basicpb.EchoRequest,
 ) (*basicpb.EchoResponse, error) {
@@ -50,7 +59,7 @@ func (s *GRPCServer) Echo(
 	}, nil
 }
 
-func (s *GRPCServer) UseManyTypes(
+func (s *grpcServer) UseManyTypes(
 	ctx context.Context,
 	req *basicpb.UseManyTypesRequest,
 ) (*basicpb.UseManyTypesResponse, error) {

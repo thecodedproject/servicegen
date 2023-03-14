@@ -26,6 +26,32 @@
         --- FAIL: TestClientLocal/TestPing/empty (X.XXs)
     --- FAIL: TestClientLocal/TestUseManyTypes (X.XXs)
         --- FAIL: TestClientLocal/TestUseManyTypes/empty (X.XXs)
+=== RUN   TestClientGRPC
+=== RUN   TestClientGRPC/TestEcho
+=== RUN   TestClientGRPC/TestEcho/empty
+    client_echo_test.go:21: 
+        	Error Trace:	/Users/jonathancooper/code/codedproject/servicegen/example_basic_service/client/client_echo_test.go:21
+        	Error:      	TODO: Implement test...
+        	Test:       	TestClientGRPC/TestEcho/empty
+=== RUN   TestClientGRPC/TestPing
+=== RUN   TestClientGRPC/TestPing/empty
+    client_ping_test.go:21: 
+        	Error Trace:	/Users/jonathancooper/code/codedproject/servicegen/example_basic_service/client/client_ping_test.go:21
+        	Error:      	TODO: Implement test...
+        	Test:       	TestClientGRPC/TestPing/empty
+=== RUN   TestClientGRPC/TestUseManyTypes
+=== RUN   TestClientGRPC/TestUseManyTypes/empty
+    client_use_many_types_test.go:21: 
+        	Error Trace:	/Users/jonathancooper/code/codedproject/servicegen/example_basic_service/client/client_use_many_types_test.go:21
+        	Error:      	TODO: Implement test...
+        	Test:       	TestClientGRPC/TestUseManyTypes/empty
+--- FAIL: TestClientGRPC (X.XXs)
+    --- FAIL: TestClientGRPC/TestEcho (X.XXs)
+        --- FAIL: TestClientGRPC/TestEcho/empty (X.XXs)
+    --- FAIL: TestClientGRPC/TestPing (X.XXs)
+        --- FAIL: TestClientGRPC/TestPing/empty (X.XXs)
+    --- FAIL: TestClientGRPC/TestUseManyTypes (X.XXs)
+        --- FAIL: TestClientGRPC/TestUseManyTypes/empty (X.XXs)
 FAIL
 FAIL	github.com/thecodedproject/servicegen/example_basic_service/client	X.XXXs
 ?   	github.com/thecodedproject/servicegen/example_basic_service/client/grpc	[no test files]

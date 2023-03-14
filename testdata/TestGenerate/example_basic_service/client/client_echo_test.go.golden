@@ -19,7 +19,7 @@ func (ts *clientSuite) TestEcho() {
 			ts.T().Run(test.Name, func(t *testing.T) {
 
 				require.Fail(t, "TODO: Implement test...")
-				//c = ts.createClient(
+				//c := ts.createClient(
 				//	resources.NewForTesting(t),
 				//)
 

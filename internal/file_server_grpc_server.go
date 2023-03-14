@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"github.com/iancoleman/strcase"
 	"github.com/thecodedproject/gopkg"
 	"github.com/thecodedproject/gopkg/tmpl"
 )
@@ -25,8 +26,14 @@ func fileServerGrpcServer(
 				},
 				Types: []gopkg.DeclType{
 					{
-						Name: "GRPCServer",
+						Name: "grpcServer",
 						Type: gopkg.TypeStruct{
+							Embeds: []gopkg.Type{
+								gopkg.TypeNamed{
+									Name: "Unimplemented" + strcase.ToCamel(s.Name) + "Server",
+									Import: s.PbImport.Import,
+								},
+							},
 							Fields: []gopkg.DeclVar{
 								s.ResourcesDecl,
 							},
@@ -43,7 +50,27 @@ func makeServerFuncs(
 	s serviceDefinition,
 ) ([]gopkg.DeclFunc, error) {
 
-	serverFuncs := make([]gopkg.DeclFunc, 0, len(s.ApiFuncs))
+	serverFuncs := make([]gopkg.DeclFunc, 0, len(s.ApiFuncs)+1)
+
+	serverFuncs = append(serverFuncs, gopkg.DeclFunc{
+		Name: "New",
+		Args: []gopkg.DeclVar{
+			s.ResourcesDecl,
+		},
+		ReturnArgs: tmpl.UnnamedReturnArgs(
+			gopkg.TypePointer{
+				ValueType: gopkg.TypeNamed{
+					Name: "grpcServer",
+				},
+			},
+		),
+		BodyTmpl: `
+	return &grpcServer{
+		r: r,
+	}
+`,
+	})
+
 	for _, f := range s.ApiFuncs {
 
 		f = tmpl.FuncWithContextAndError(
@@ -72,7 +99,7 @@ func makeServerFuncs(
 		)
 
 		f.Receiver.VarName = "s"
-		f.Receiver.TypeName = "GRPCServer"
+		f.Receiver.TypeName = "grpcServer"
 		f.Receiver.IsPointer = true
 
 		reqMessage, err := s.ApiProto.MethodRequestMessage(f.Name)
