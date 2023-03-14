@@ -4,6 +4,7 @@ package nestedpb;
 
 service NestedService {
   rpc Ping (PingRequest) returns (PingResponse) {}
+  rpc MultiLevelNest (MultiLevelNestReq) returns (MultiLevelNestResp) {}
 }
 
 message PingRequest {
@@ -14,6 +15,16 @@ message PingResponse {
 	OtherNestedVal some_other_value = 1;
 }
 
+message MultiLevelNestReq {
+  TopLevelMsg a = 1;
+  NestedVal repeated_msg = 2;
+}
+
+message MultiLevelNestResp {
+  OtherLevelMsg a = 1;
+  OtherNestedVal other_repeated_msg = 2;
+}
+
 message NestedVal {
 	int64 some_value = 1;
 }
@@ -22,3 +33,13 @@ message OtherNestedVal {
 	string some_string = 1;
 }
 
+message TopLevelMsg {
+  OtherLevelMsg a = 1;
+  NestedVal b = 2;
+  string some = 3;
+}
+
+message OtherLevelMsg {
+  OtherNestedVal val = 1;
+  int64 value = 2;
+}

@@ -1,0 +1,20 @@
+package nested
+
+import (
+	context "context"
+	example_nested_msgs "github.com/thecodedproject/servicegen/example_nested_msgs"
+	resources "github.com/thecodedproject/servicegen/example_nested_msgs/resources"
+)
+
+func SeveralParams(
+	ctx context.Context,
+	r resources.Resources,
+	a string,
+	b example_nested_msgs.MsgA,
+	c example_nested_msgs.MsgC,
+	d int64,
+) (example_nested_msgs.MsgA, example_nested_msgs.MsgB, error) {
+
+	return example_nested_msgs.MsgA{}, example_nested_msgs.MsgB{}, nil
+}
+

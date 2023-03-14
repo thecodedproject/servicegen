@@ -1,0 +1,14 @@
+example_nested_msgs/api.go
+example_nested_msgs/client/client_lone_nest_test.go
+example_nested_msgs/client/client_multi_depth_test.go
+example_nested_msgs/client/client_several_params_test.go
+example_nested_msgs/client/client_test.go
+example_nested_msgs/client/grpc/grpc_client.go
+example_nested_msgs/client/local/client.go
+example_nested_msgs/internal/lone_nest.go
+example_nested_msgs/internal/multi_depth.go
+example_nested_msgs/internal/several_params.go
+example_nested_msgs/resources/resources.go
+example_nested_msgs/resources/resources_impl.go
+example_nested_msgs/server/grpc_server.go
+example_nested_msgs/types.go

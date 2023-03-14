@@ -1,0 +1,2 @@
+package github.com/thecodedproject/servicegen/example_nested_msgs
+	imports github.com/thecodedproject/servicegen/example_nested_msgs: import cycle not allowed

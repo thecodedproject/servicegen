@@ -4,7 +4,7 @@
 // - protoc             v3.21.3
 // source: api.proto
 
-package basicpb
+package pb
 
 import (
 	context "context"

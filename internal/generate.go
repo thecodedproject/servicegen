@@ -44,6 +44,7 @@ func Generate() error {
 		fileInternalFiles(s),
 		fileResources(s),
 		fileServerGrpcServer(s),
+		fileTypes(s),
 	)
 	if err != nil {
 		return err
@@ -90,7 +91,7 @@ func createServiceDefinition(
 		return serviceDefinition{}, err
 	}
 
-	apiFuncs, err := apiFuncSignatures(apiProto)
+	apiFuncs, err := apiFuncSignatures(apiProto, importPath)
 	if err != nil {
 		return serviceDefinition{}, err
 	}
@@ -121,6 +122,7 @@ func createServiceDefinition(
 
 func apiFuncSignatures(
 	apiProto proto.Service,
+	serviceImportPath string,
 ) ([]gopkg.DeclFunc, error) {
 
 	funcs := make([]gopkg.DeclFunc, len(apiProto.Methods))
@@ -139,8 +141,8 @@ func apiFuncSignatures(
 
 		funcs[iM] = tmpl.FuncWithContextAndError(
 			m.Name,
-			argsFromProtoMessage(reqMessage),
-			unnamedArgsFromProtoMessage(respMessage),
+			argsFromProtoMessage(reqMessage, serviceImportPath),
+			unnamedArgsFromProtoMessage(respMessage, serviceImportPath),
 		)
 	}
 
@@ -161,6 +163,7 @@ func makeImportWithAlias(
 
 func argsFromProtoMessage(
 	m proto.Message,
+	serviceImportPath string,
 ) []gopkg.DeclVar {
 
 	args := make([]gopkg.DeclVar, len(m.Fields))
@@ -168,7 +171,7 @@ func argsFromProtoMessage(
 	for iF, f := range m.Fields {
 		args[iF] = gopkg.DeclVar{
 			Name: strcase.ToLowerCamel(f.Name),
-			Type: goTypeFromProtoType(f.Type),
+			Type: goTypeFromProtoType(f.Type, serviceImportPath),
 		}
 	}
 
@@ -177,13 +180,14 @@ func argsFromProtoMessage(
 
 func unnamedArgsFromProtoMessage(
 	m proto.Message,
+	serviceImportPath string,
 ) []gopkg.DeclVar {
 
 	args := make([]gopkg.DeclVar, len(m.Fields))
 
 	for iF, f := range m.Fields {
 		args[iF] = gopkg.DeclVar{
-			Type: goTypeFromProtoType(f.Type),
+			Type: goTypeFromProtoType(f.Type, serviceImportPath),
 		}
 	}
 
@@ -192,6 +196,7 @@ func unnamedArgsFromProtoMessage(
 
 func goTypeFromProtoType(
 	protoType string,
+	serviceImportPath string,
 ) gopkg.Type {
 
 	switch protoType {
@@ -208,6 +213,8 @@ func goTypeFromProtoType(
 
 	return gopkg.TypeNamed{
 		Name: protoType,
+		Import: serviceImportPath,
+		ValueType: gopkg.TypeStruct{},
 	}
 }
 

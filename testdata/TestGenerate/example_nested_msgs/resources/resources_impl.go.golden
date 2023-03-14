@@ -1,0 +1,13 @@
+package resources
+
+import (
+	testing "testing"
+)
+
+type Resources interface{}
+
+func NewForTesting(_ *testing.T) *resources {
+
+	return &resources{}
+}
+

@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "github.com/thecodedproject/servicegen/example_nested_service/pb";
+
+service Nested {
+  rpc LoneNest(LoneNestRequest) returns (LoneNestResponse) {}
+  rpc SeveralParams(SeveralParamsRequest) returns (SeveralParamsResponse) {}
+  rpc MultiDepth(MultiDepthRequest) returns (MultiDepthResponse) {}
+}
+
+message LoneNestRequest {
+  MsgA a = 1;
+}
+
+message LoneNestResponse {
+  MsgB b = 1;
+}
+
+message SeveralParamsRequest {
+  string a = 1;
+  MsgA b = 2;
+  MsgC c = 3;
+  int64 d = 4;
+}
+
+message SeveralParamsResponse {
+  MsgA a = 1;
+  MsgB b = 2;
+}
+
+message MultiDepthRequest {
+  MsgD a = 1;
+}
+
+message MultiDepthResponse {
+  MsgE a = 1;
+}
+
+message MsgA {
+  string a = 1;
+}
+
+message MsgB {
+  int64 b = 1;
+}
+
+message MsgC {
+  bool c = 1;
+}
+
+message MsgD {
+  MsgA a = 1;
+  MsgB b = 2;
+}
+
+message MsgE {
+  MsgC c = 1;
+  MsgD d = 2;
+}

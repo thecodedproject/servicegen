@@ -1,0 +1,121 @@
+package grpc
+
+import (
+	context "context"
+	errors "errors"
+	flag "flag"
+	example_nested_msgs "github.com/thecodedproject/servicegen/example_nested_msgs"
+	pb "github.com/thecodedproject/servicegen/example_nested_msgs/pb"
+	grpc "google.golang.org/grpc"
+	connectivity "google.golang.org/grpc/connectivity"
+	testing "testing"
+	time "time"
+)
+
+var address = flag.String("nested_grpc_address", "", "host:port of nested gRPC service")
+
+type grpcClient struct {
+	rpcConn *grpc.ClientConn
+	rpcClient pb.NestedClient
+}
+
+func New() (*grpcClient, error) {
+
+	conn, err := grpc.Dial(*address, grpc.WithInsecure())
+	if err != nil {
+		return nil, err
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	for {
+		if conn.GetState() == connectivity.Ready {
+			break
+		}
+		if !conn.WaitForStateChange(ctx, conn.GetState()) {
+			err := errors.New("grpc timeout whilst connecting")
+			return nil, err
+		}
+	}
+
+	return &grpcClient{
+		rpcConn: conn,
+		rpcClient: pb.NewNestedClient(conn),
+	}, nil
+}
+
+func NewForTesting(
+	_ *testing.T,
+	conn *grpc.ClientConn,
+) *grpcClient {
+
+	return &grpcClient{
+		rpcConn: conn,
+		rpcClient: pb.NewNestedClient(conn),
+	}
+}
+
+func (c *grpcClient) LoneNest(
+	ctx context.Context,
+	a example_nested_msgs.MsgA,
+) (example_nested_msgs.MsgB, error) {
+
+
+	res, err := c.rpcClient.LoneNest(
+		ctx,
+		&pb.LoneNestRequest{
+			A: a,
+		},
+	)
+	if err != nil {
+		return example_nested_msgs.MsgB{}, err
+	}
+
+	return res.B, nil
+}
+
+func (c *grpcClient) SeveralParams(
+	ctx context.Context,
+	a string,
+	b example_nested_msgs.MsgA,
+	c example_nested_msgs.MsgC,
+	d int64,
+) (example_nested_msgs.MsgA, example_nested_msgs.MsgB, error) {
+
+
+	res, err := c.rpcClient.SeveralParams(
+		ctx,
+		&pb.SeveralParamsRequest{
+			A: a,
+			B: b,
+			C: c,
+			D: d,
+		},
+	)
+	if err != nil {
+		return example_nested_msgs.MsgA{}, example_nested_msgs.MsgB{}, err
+	}
+
+	return res.A, res.B, nil
+}
+
+func (c *grpcClient) MultiDepth(
+	ctx context.Context,
+	a example_nested_msgs.MsgD,
+) (example_nested_msgs.MsgE, error) {
+
+
+	res, err := c.rpcClient.MultiDepth(
+		ctx,
+		&pb.MultiDepthRequest{
+			A: a,
+		},
+	)
+	if err != nil {
+		return example_nested_msgs.MsgE{}, err
+	}
+
+	return res.A, nil
+}
+

@@ -1,0 +1,17 @@
+package nested
+
+import (
+	context "context"
+	example_nested_msgs "github.com/thecodedproject/servicegen/example_nested_msgs"
+	resources "github.com/thecodedproject/servicegen/example_nested_msgs/resources"
+)
+
+func LoneNest(
+	ctx context.Context,
+	r resources.Resources,
+	a example_nested_msgs.MsgA,
+) (example_nested_msgs.MsgB, error) {
+
+	return example_nested_msgs.MsgB{}, nil
+}
+

@@ -1,0 +1,62 @@
+package local
+
+import (
+	context "context"
+	example_nested_msgs "github.com/thecodedproject/servicegen/example_nested_msgs"
+	internal "github.com/thecodedproject/servicegen/example_nested_msgs/internal"
+	resources "github.com/thecodedproject/servicegen/example_nested_msgs/resources"
+)
+
+type client struct {
+	r resources.Resources
+}
+
+func New(r resources.Resources) *client {
+
+	return &client{
+		r: r,
+	}
+}
+
+func (c *client) LoneNest(
+	ctx context.Context,
+	a example_nested_msgs.MsgA,
+) (example_nested_msgs.MsgB, error) {
+
+	return internal.LoneNest(
+		ctx,
+		c.r,
+		a,
+	)
+}
+
+func (c *client) SeveralParams(
+	ctx context.Context,
+	a string,
+	b example_nested_msgs.MsgA,
+	c example_nested_msgs.MsgC,
+	d int64,
+) (example_nested_msgs.MsgA, example_nested_msgs.MsgB, error) {
+
+	return internal.SeveralParams(
+		ctx,
+		c.r,
+		a,
+		b,
+		c,
+		d,
+	)
+}
+
+func (c *client) MultiDepth(
+	ctx context.Context,
+	a example_nested_msgs.MsgD,
+) (example_nested_msgs.MsgE, error) {
+
+	return internal.MultiDepth(
+		ctx,
+		c.r,
+		a,
+	)
+}
+

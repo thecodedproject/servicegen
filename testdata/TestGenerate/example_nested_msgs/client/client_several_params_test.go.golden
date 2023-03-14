@@ -1,0 +1,32 @@
+package client_test
+
+import (
+	require "github.com/stretchr/testify/require"
+	testing "testing"
+)
+
+func (ts *clientSuite) TestSeveralParams() {
+
+		testCases := []struct{
+			Name string
+		}{
+			{
+				Name: "empty",
+			},
+		}
+
+		for _, test := range testCases {
+			ts.T().Run(test.Name, func(t *testing.T) {
+
+				require.Fail(t, "TODO: Implement test...")
+				//c := ts.createClient(
+				//	resources.NewForTesting(t),
+				//)
+
+				//ctx := context.Background()
+				//..., err := c.SeveralParams(ctx, ...)
+				//require.NoError(t, err)
+			})
+		}
+	}
+

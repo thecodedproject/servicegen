@@ -2,6 +2,7 @@ package proto
 
 import (
 	"fmt"
+	"sort"
 )
 
 type Service struct {
@@ -147,17 +148,27 @@ func (m Message) FieldTypes() []string {
 func (s Service) NestedMessages(
 ) []Message {
 
-	nestedMessages := make([]Message, 0)
+	nestedSet := make(map[string]Message)
 	for _, m := range s.Messages {
 		for _, f := range m.Fields {
 			nestedMessage, err := s.Message(f.Type)
 			if err != nil {
 				continue // Not a nested type
 			}
-			nestedMessages = append(nestedMessages, nestedMessage)
+			nestedSet[nestedMessage.Name] = nestedMessage
 		}
 	}
-	return nestedMessages
+
+	msgs := make([]Message, 0, len(nestedSet))
+	for _, m := range nestedSet {
+		msgs = append(msgs, m)
+	}
+
+	sort.Slice(msgs, func(i, j int) bool {
+		return msgs[i].Name < msgs[j].Name
+	})
+
+	return msgs
 }
 
 func (s Service) IsMessage(

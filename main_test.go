@@ -17,6 +17,7 @@ func TestGenerate(t *testing.T) {
 
 	testDirs := []string{
 		"example_basic_service",
+		"example_nested_msgs",
 	}
 
 	for _, testDir := range testDirs {

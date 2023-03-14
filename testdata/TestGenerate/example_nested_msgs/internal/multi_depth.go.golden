@@ -1,0 +1,17 @@
+package nested
+
+import (
+	context "context"
+	example_nested_msgs "github.com/thecodedproject/servicegen/example_nested_msgs"
+	resources "github.com/thecodedproject/servicegen/example_nested_msgs/resources"
+)
+
+func MultiDepth(
+	ctx context.Context,
+	r resources.Resources,
+	a example_nested_msgs.MsgD,
+) (example_nested_msgs.MsgE, error) {
+
+	return example_nested_msgs.MsgE{}, nil
+}
+

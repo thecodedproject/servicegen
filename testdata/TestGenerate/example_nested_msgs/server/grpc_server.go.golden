@@ -1,0 +1,86 @@
+package server
+
+import (
+	context "context"
+	internal "github.com/thecodedproject/servicegen/example_nested_msgs/internal"
+	pb "github.com/thecodedproject/servicegen/example_nested_msgs/pb"
+	resources "github.com/thecodedproject/servicegen/example_nested_msgs/resources"
+)
+
+type grpcServer struct {
+	pb.UnimplementedNestedServer
+
+	r resources.Resources
+}
+
+func New(r resources.Resources) *grpcServer {
+
+	return &grpcServer{
+		r: r,
+	}
+}
+
+func (s *grpcServer) LoneNest(
+	ctx context.Context,
+	req *pb.LoneNestRequest,
+) (*pb.LoneNestResponse, error) {
+
+
+	b, err := internal.LoneNest(
+		ctx,
+		s.r,
+		req.A,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.LoneNestResponse{
+		B: b,
+	}, nil
+}
+
+func (s *grpcServer) SeveralParams(
+	ctx context.Context,
+	req *pb.SeveralParamsRequest,
+) (*pb.SeveralParamsResponse, error) {
+
+
+	a, b, err := internal.SeveralParams(
+		ctx,
+		s.r,
+		req.A,
+		req.B,
+		req.C,
+		req.D,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SeveralParamsResponse{
+		A: a,
+		B: b,
+	}, nil
+}
+
+func (s *grpcServer) MultiDepth(
+	ctx context.Context,
+	req *pb.MultiDepthRequest,
+) (*pb.MultiDepthResponse, error) {
+
+
+	a, err := internal.MultiDepth(
+		ctx,
+		s.r,
+		req.A,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.MultiDepthResponse{
+		A: a,
+	}, nil
+}
+

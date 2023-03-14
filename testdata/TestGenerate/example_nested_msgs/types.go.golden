@@ -1,0 +1,12 @@
+package nested
+
+type MsgA struct {}
+
+type MsgB struct {}
+
+type MsgC struct {}
+
+type MsgD struct {}
+
+type MsgE struct {}
+

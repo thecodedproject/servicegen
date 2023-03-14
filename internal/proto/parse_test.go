@@ -82,6 +82,11 @@ func TestParse(t *testing.T) {
 						RequestMessage: "PingRequest",
 						ResponseMessage: "PingResponse",
 					},
+					{
+						Name: "MultiLevelNest",
+						RequestMessage: "MultiLevelNestReq",
+						ResponseMessage: "MultiLevelNestResp",
+					},
 				},
 				Messages: []proto.Message{
 					{
@@ -105,6 +110,36 @@ func TestParse(t *testing.T) {
 						},
 					},
 					{
+						Name: "MultiLevelNestReq",
+						Fields: []proto.Field{
+							{
+								Name: "a",
+								Type: "TopLevelMsg",
+								IsNestedMessage: true,
+							},
+							{
+								Name: "repeated_msg",
+								Type: "NestedVal",
+								IsNestedMessage: true,
+							},
+						},
+					},
+					{
+						Name: "MultiLevelNestResp",
+						Fields: []proto.Field{
+							{
+								Name: "a",
+								Type: "OtherLevelMsg",
+								IsNestedMessage: true,
+							},
+							{
+								Name: "other_repeated_msg",
+								Type: "OtherNestedVal",
+								IsNestedMessage: true,
+							},
+						},
+					},
+					{
 						Name: "NestedVal",
 						Fields: []proto.Field{
 							{
@@ -119,6 +154,39 @@ func TestParse(t *testing.T) {
 							{
 								Name: "some_string",
 								Type: "string",
+							},
+						},
+					},
+					{
+						Name: "TopLevelMsg",
+						Fields: []proto.Field{
+							{
+								Name: "a",
+								Type: "OtherLevelMsg",
+								IsNestedMessage: true,
+							},
+							{
+								Name: "b",
+								Type: "NestedVal",
+								IsNestedMessage: true,
+							},
+							{
+								Name: "some",
+								Type: "string",
+							},
+						},
+					},
+					{
+						Name: "OtherLevelMsg",
+						Fields: []proto.Field{
+							{
+								Name: "val",
+								Type: "OtherNestedVal",
+								IsNestedMessage: true,
+							},
+							{
+								Name: "value",
+								Type: "int64",
 							},
 						},
 					},
