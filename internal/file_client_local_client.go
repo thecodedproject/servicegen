@@ -35,14 +35,17 @@ func fileClientLocalClient(
 `,
 			},
 		}
+
+		clientVarName := "_c"
+
 		for _, f := range s.ApiFuncs {
 			f.Receiver = gopkg.FuncReceiver{
-				VarName: "c",
+				VarName: clientVarName,
 				TypeName: "client",
 				IsPointer: true,
 			}
 
-			f.BodyData = internalFuncCallParams(f.Args)
+			f.BodyData = internalFuncCallParams(f.Args, clientVarName)
 			f.BodyTmpl = `
 	return internal.{{.Name}}(
 	{{- range .BodyData}}
@@ -98,6 +101,7 @@ func fileClientLocalClient(
 // `c *Client`
 func internalFuncCallParams(
 	apiFuncArgs []gopkg.DeclVar,
+	clientVarName string,
 ) []string {
 
 	params := make([]string, len(apiFuncArgs))
@@ -106,10 +110,10 @@ func internalFuncCallParams(
 	}
 
 	if len(params) < 2 {
-		return append(params, "c.r")
+		return append(params, clientVarName + ".r")
 	}
 
 	params = append(params[:2], params[1:]...)
-	params[1] = "c.r"
+	params[1] = clientVarName + ".r"
 	return params
 }

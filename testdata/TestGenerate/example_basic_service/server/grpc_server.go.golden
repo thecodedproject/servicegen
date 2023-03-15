@@ -20,15 +20,14 @@ func New(r resources.Resources) *grpcServer {
 	}
 }
 
-func (s *grpcServer) Ping(
+func (_s *grpcServer) Ping(
 	ctx context.Context,
 	req *pb.PingRequest,
 ) (*pb.PingResponse, error) {
 
-
 	response, err := internal.Ping(
 		ctx,
-		s.r,
+		_s.r,
 	)
 	if err != nil {
 		return nil, err
@@ -39,15 +38,14 @@ func (s *grpcServer) Ping(
 	}, nil
 }
 
-func (s *grpcServer) Echo(
+func (_s *grpcServer) Echo(
 	ctx context.Context,
 	req *pb.EchoRequest,
 ) (*pb.EchoResponse, error) {
 
-
 	respMessage, err := internal.Echo(
 		ctx,
-		s.r,
+		_s.r,
 		req.ReqMessage,
 	)
 	if err != nil {
@@ -59,15 +57,14 @@ func (s *grpcServer) Echo(
 	}, nil
 }
 
-func (s *grpcServer) UseManyTypes(
+func (_s *grpcServer) UseManyTypes(
 	ctx context.Context,
 	req *pb.UseManyTypesRequest,
 ) (*pb.UseManyTypesResponse, error) {
 
-
 	one, two, three, four, five, six, err := internal.UseManyTypes(
 		ctx,
-		s.r,
+		_s.r,
 		req.One,
 		req.Two,
 		req.Three,

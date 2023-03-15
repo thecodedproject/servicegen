@@ -2,12 +2,11 @@ package nested
 
 import (
 	context "context"
-	example_nested_msgs "github.com/thecodedproject/servicegen/example_nested_msgs"
 )
 
 type Client interface {
-	LoneNest(ctx context.Context, a example_nested_msgs.MsgA) (example_nested_msgs.MsgB, error)
-	SeveralParams(ctx context.Context, a string, b example_nested_msgs.MsgA, c example_nested_msgs.MsgC, d int64) (example_nested_msgs.MsgA, example_nested_msgs.MsgB, error)
-	MultiDepth(ctx context.Context, a example_nested_msgs.MsgD) (example_nested_msgs.MsgE, error)
+	LoneNest(ctx context.Context, a MsgA) (MsgB, error)
+	SeveralParams(ctx context.Context, a string, b MsgA, c MsgC, d int64) (MsgA, MsgB, error)
+	MultiDepth(ctx context.Context, a MsgD) (MsgE, error)
 }
 

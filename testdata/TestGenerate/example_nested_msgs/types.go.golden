@@ -1,12 +1,26 @@
 package nested
 
-type MsgA struct {}
+type MsgA struct {
+	A string
+}
 
-type MsgB struct {}
+type MsgB struct {
+	B int64
+}
 
-type MsgC struct {}
+type MsgC struct {
+	C bool
+}
 
-type MsgD struct {}
+type MsgD struct {
+	A MsgA
+	B MsgB
+	C string
+}
 
-type MsgE struct {}
+type MsgE struct {
+	C MsgC
+	D MsgD
+	F int64
+}
 

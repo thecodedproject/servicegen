@@ -56,26 +56,25 @@ func NewForTesting(
 	}
 }
 
-func (c *grpcClient) LoneNest(
+func (_c *grpcClient) LoneNest(
 	ctx context.Context,
 	a example_nested_msgs.MsgA,
 ) (example_nested_msgs.MsgB, error) {
 
-
-	res, err := c.rpcClient.LoneNest(
+	res, err := _c.rpcClient.LoneNest(
 		ctx,
 		&pb.LoneNestRequest{
-			A: a,
+			A: pb.MsgAToProto(a),
 		},
 	)
 	if err != nil {
 		return example_nested_msgs.MsgB{}, err
 	}
 
-	return res.B, nil
+	return pb.MsgBFromProto(res.B), nil
 }
 
-func (c *grpcClient) SeveralParams(
+func (_c *grpcClient) SeveralParams(
 	ctx context.Context,
 	a string,
 	b example_nested_msgs.MsgA,
@@ -83,13 +82,12 @@ func (c *grpcClient) SeveralParams(
 	d int64,
 ) (example_nested_msgs.MsgA, example_nested_msgs.MsgB, error) {
 
-
-	res, err := c.rpcClient.SeveralParams(
+	res, err := _c.rpcClient.SeveralParams(
 		ctx,
 		&pb.SeveralParamsRequest{
 			A: a,
-			B: b,
-			C: c,
+			B: pb.MsgAToProto(b),
+			C: pb.MsgCToProto(c),
 			D: d,
 		},
 	)
@@ -97,25 +95,24 @@ func (c *grpcClient) SeveralParams(
 		return example_nested_msgs.MsgA{}, example_nested_msgs.MsgB{}, err
 	}
 
-	return res.A, res.B, nil
+	return pb.MsgAFromProto(res.A), pb.MsgBFromProto(res.B), nil
 }
 
-func (c *grpcClient) MultiDepth(
+func (_c *grpcClient) MultiDepth(
 	ctx context.Context,
 	a example_nested_msgs.MsgD,
 ) (example_nested_msgs.MsgE, error) {
 
-
-	res, err := c.rpcClient.MultiDepth(
+	res, err := _c.rpcClient.MultiDepth(
 		ctx,
 		&pb.MultiDepthRequest{
-			A: a,
+			A: pb.MsgDToProto(a),
 		},
 	)
 	if err != nil {
 		return example_nested_msgs.MsgE{}, err
 	}
 
-	return res.A, nil
+	return pb.MsgEFromProto(res.A), nil
 }
 

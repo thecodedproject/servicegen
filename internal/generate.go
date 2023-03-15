@@ -42,6 +42,7 @@ func Generate() error {
 		fileClientLocalClient(s),
 		fileClientTestFiles(s),
 		fileInternalFiles(s),
+		filePbTypeConversion(s),
 		fileResources(s),
 		fileServerGrpcServer(s),
 		fileTypes(s),

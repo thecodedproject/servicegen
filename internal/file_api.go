@@ -13,6 +13,7 @@ func fileApi(
 			{
 				Filepath: "api.go",
 				PackageName: s.Name,
+				PackageImportPath: s.ImportPath,
 				Types: []gopkg.DeclType{
 					{
 						Name: "Client",

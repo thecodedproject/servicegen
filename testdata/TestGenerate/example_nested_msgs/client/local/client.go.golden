@@ -18,19 +18,19 @@ func New(r resources.Resources) *client {
 	}
 }
 
-func (c *client) LoneNest(
+func (_c *client) LoneNest(
 	ctx context.Context,
 	a example_nested_msgs.MsgA,
 ) (example_nested_msgs.MsgB, error) {
 
 	return internal.LoneNest(
 		ctx,
-		c.r,
+		_c.r,
 		a,
 	)
 }
 
-func (c *client) SeveralParams(
+func (_c *client) SeveralParams(
 	ctx context.Context,
 	a string,
 	b example_nested_msgs.MsgA,
@@ -40,7 +40,7 @@ func (c *client) SeveralParams(
 
 	return internal.SeveralParams(
 		ctx,
-		c.r,
+		_c.r,
 		a,
 		b,
 		c,
@@ -48,14 +48,14 @@ func (c *client) SeveralParams(
 	)
 }
 
-func (c *client) MultiDepth(
+func (_c *client) MultiDepth(
 	ctx context.Context,
 	a example_nested_msgs.MsgD,
 ) (example_nested_msgs.MsgE, error) {
 
 	return internal.MultiDepth(
 		ctx,
-		c.r,
+		_c.r,
 		a,
 	)
 }

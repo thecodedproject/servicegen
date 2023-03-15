@@ -1,2 +1,62 @@
-package github.com/thecodedproject/servicegen/example_nested_msgs
-	imports github.com/thecodedproject/servicegen/example_nested_msgs: import cycle not allowed
+?   	github.com/thecodedproject/servicegen/example_nested_msgs	[no test files]
+=== RUN   TestClientLocal
+=== RUN   TestClientLocal/TestLoneNest
+=== RUN   TestClientLocal/TestLoneNest/empty
+    client_lone_nest_test.go:21: 
+        	Error Trace:	/Users/jonathancooper/code/codedproject/servicegen/example_nested_msgs/client/client_lone_nest_test.go:21
+        	Error:      	TODO: Implement test...
+        	Test:       	TestClientLocal/TestLoneNest/empty
+=== RUN   TestClientLocal/TestMultiDepth
+=== RUN   TestClientLocal/TestMultiDepth/empty
+    client_multi_depth_test.go:21: 
+        	Error Trace:	/Users/jonathancooper/code/codedproject/servicegen/example_nested_msgs/client/client_multi_depth_test.go:21
+        	Error:      	TODO: Implement test...
+        	Test:       	TestClientLocal/TestMultiDepth/empty
+=== RUN   TestClientLocal/TestSeveralParams
+=== RUN   TestClientLocal/TestSeveralParams/empty
+    client_several_params_test.go:21: 
+        	Error Trace:	/Users/jonathancooper/code/codedproject/servicegen/example_nested_msgs/client/client_several_params_test.go:21
+        	Error:      	TODO: Implement test...
+        	Test:       	TestClientLocal/TestSeveralParams/empty
+--- FAIL: TestClientLocal (X.XXs)
+    --- FAIL: TestClientLocal/TestLoneNest (X.XXs)
+        --- FAIL: TestClientLocal/TestLoneNest/empty (X.XXs)
+    --- FAIL: TestClientLocal/TestMultiDepth (X.XXs)
+        --- FAIL: TestClientLocal/TestMultiDepth/empty (X.XXs)
+    --- FAIL: TestClientLocal/TestSeveralParams (X.XXs)
+        --- FAIL: TestClientLocal/TestSeveralParams/empty (X.XXs)
+=== RUN   TestClientGRPC
+=== RUN   TestClientGRPC/TestLoneNest
+=== RUN   TestClientGRPC/TestLoneNest/empty
+    client_lone_nest_test.go:21: 
+        	Error Trace:	/Users/jonathancooper/code/codedproject/servicegen/example_nested_msgs/client/client_lone_nest_test.go:21
+        	Error:      	TODO: Implement test...
+        	Test:       	TestClientGRPC/TestLoneNest/empty
+=== RUN   TestClientGRPC/TestMultiDepth
+=== RUN   TestClientGRPC/TestMultiDepth/empty
+    client_multi_depth_test.go:21: 
+        	Error Trace:	/Users/jonathancooper/code/codedproject/servicegen/example_nested_msgs/client/client_multi_depth_test.go:21
+        	Error:      	TODO: Implement test...
+        	Test:       	TestClientGRPC/TestMultiDepth/empty
+=== RUN   TestClientGRPC/TestSeveralParams
+=== RUN   TestClientGRPC/TestSeveralParams/empty
+    client_several_params_test.go:21: 
+        	Error Trace:	/Users/jonathancooper/code/codedproject/servicegen/example_nested_msgs/client/client_several_params_test.go:21
+        	Error:      	TODO: Implement test...
+        	Test:       	TestClientGRPC/TestSeveralParams/empty
+--- FAIL: TestClientGRPC (X.XXs)
+    --- FAIL: TestClientGRPC/TestLoneNest (X.XXs)
+        --- FAIL: TestClientGRPC/TestLoneNest/empty (X.XXs)
+    --- FAIL: TestClientGRPC/TestMultiDepth (X.XXs)
+        --- FAIL: TestClientGRPC/TestMultiDepth/empty (X.XXs)
+    --- FAIL: TestClientGRPC/TestSeveralParams (X.XXs)
+        --- FAIL: TestClientGRPC/TestSeveralParams/empty (X.XXs)
+FAIL
+FAIL	github.com/thecodedproject/servicegen/example_nested_msgs/client	X.XXXs
+?   	github.com/thecodedproject/servicegen/example_nested_msgs/client/grpc	[no test files]
+?   	github.com/thecodedproject/servicegen/example_nested_msgs/client/local	[no test files]
+?   	github.com/thecodedproject/servicegen/example_nested_msgs/internal	[no test files]
+?   	github.com/thecodedproject/servicegen/example_nested_msgs/pb	[no test files]
+?   	github.com/thecodedproject/servicegen/example_nested_msgs/resources	[no test files]
+?   	github.com/thecodedproject/servicegen/example_nested_msgs/server	[no test files]
+FAIL

@@ -55,10 +55,9 @@ func NewForTesting(
 	}
 }
 
-func (c *grpcClient) Ping(ctx context.Context) (string, error) {
+func (_c *grpcClient) Ping(ctx context.Context) (string, error) {
 
-
-	res, err := c.rpcClient.Ping(
+	res, err := _c.rpcClient.Ping(
 		ctx,
 		&pb.PingRequest{
 		},
@@ -70,13 +69,12 @@ func (c *grpcClient) Ping(ctx context.Context) (string, error) {
 	return res.Response, nil
 }
 
-func (c *grpcClient) Echo(
+func (_c *grpcClient) Echo(
 	ctx context.Context,
 	reqMessage string,
 ) (string, error) {
 
-
-	res, err := c.rpcClient.Echo(
+	res, err := _c.rpcClient.Echo(
 		ctx,
 		&pb.EchoRequest{
 			ReqMessage: reqMessage,
@@ -89,7 +87,7 @@ func (c *grpcClient) Echo(
 	return res.RespMessage, nil
 }
 
-func (c *grpcClient) UseManyTypes(
+func (_c *grpcClient) UseManyTypes(
 	ctx context.Context,
 	one int32,
 	two int64,
@@ -99,8 +97,7 @@ func (c *grpcClient) UseManyTypes(
 	six bool,
 ) (int32, int64, float32, string, []byte, bool, error) {
 
-
-	res, err := c.rpcClient.UseManyTypes(
+	res, err := _c.rpcClient.UseManyTypes(
 		ctx,
 		&pb.UseManyTypesRequest{
 			One: one,

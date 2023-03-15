@@ -7,7 +7,7 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/sebdah/goldie/v2 v2.5.3
 	github.com/stretchr/testify v1.8.2
-	github.com/thecodedproject/gopkg v0.0.0-20230314145608-fc0850960970
+	github.com/thecodedproject/gopkg v0.0.0-20230315173828-26925303f7e9
 	google.golang.org/grpc v1.53.0
 	google.golang.org/protobuf v1.28.1
 )

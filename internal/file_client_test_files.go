@@ -14,8 +14,11 @@ func fileClientTestFiles(
 
 
 	return func() ([]gopkg.FileContents, error) {
-		files := []gopkg.FileContents{
-			fileClientTestCommon(s),
+		files := make([]gopkg.FileContents, 0)
+
+		commonFile, err := fileClientTestCommon(s)
+		if err != nil {
+			return nil, err
 		}
 
 		testFiles, err := fileClientTestForAPIFuncs(s)
@@ -23,6 +26,7 @@ func fileClientTestFiles(
 			return nil, err
 		}
 
+		files = append(files, commonFile)
 		files = append(files, testFiles...)
 
 		return files, nil
@@ -31,7 +35,18 @@ func fileClientTestFiles(
 
 func fileClientTestCommon(
 	s serviceDefinition,
-) gopkg.FileContents {
+) (gopkg.FileContents, error) {
+
+	resourceFullType, err := s.ResourcesDecl.FullType(map[string]string{
+		s.ResourcesImport.Import: s.ResourcesImport.Alias,
+	})
+	if err != nil {
+		return gopkg.FileContents{}, err
+	}
+
+	createClientFuncSig := "func(" +
+		s.ResourcesDecl.Name + " " + resourceFullType +
+		") " + s.Name + ".Client"
 
 	return gopkg.FileContents{
 		Filepath: "client/client_test.go",
@@ -114,9 +129,8 @@ func fileClientTestCommon(
 			{
 				Name: "SetupTest",
 				Receiver: gopkg.FuncReceiver{"ts", "TestClientLocalSuite", true},
-				// TODO: insert imports + type names dynamically in this func body
 				BodyTmpl: `
-	ts.createClient = func(r resources.Resources) basic.Client {
+	ts.createClient = ` + createClientFuncSig + ` {
 		return client_local.New(r)
 	}
 `,
@@ -124,9 +138,8 @@ func fileClientTestCommon(
 			{
 				Name: "SetupTest",
 				Receiver: gopkg.FuncReceiver{"ts", "TestClientGRPCSuite", true},
-				// TODO: insert imports + type names dynamically in this func body
 				BodyTmpl: `
-	ts.createClient = func(r resources.Resources) basic.Client {
+	ts.createClient = ` + createClientFuncSig + ` {
 		return setupGRPCClient(ts.T(), r)
 	}
 `,
@@ -244,7 +257,7 @@ func fileClientTestCommon(
 `,
 			},
 		},
-	}
+	}, nil
 }
 
 func fileClientTestForAPIFuncs(

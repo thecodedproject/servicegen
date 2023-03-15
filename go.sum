@@ -27,6 +27,8 @@ github.com/stretchr/testify v1.8.2 h1:+h33VjcLVPDHtOdpUCuF+7gSuG3yGIftsP1YvFihtJ
 github.com/stretchr/testify v1.8.2/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/thecodedproject/gopkg v0.0.0-20230314145608-fc0850960970 h1:3rD+fuBgTOGN92Qsmkz9ieKoGPbJeEkJUvAz8TAAxZ4=
 github.com/thecodedproject/gopkg v0.0.0-20230314145608-fc0850960970/go.mod h1:/sxB16ElXIkPlI0614rTReD/ZsM+xQcypL4SEzh/h7E=
+github.com/thecodedproject/gopkg v0.0.0-20230315173828-26925303f7e9 h1:A5K38uZAHJvJ/Gy768c5x2qO1lhARUs4PVVXKCVQxB8=
+github.com/thecodedproject/gopkg v0.0.0-20230315173828-26925303f7e9/go.mod h1:/sxB16ElXIkPlI0614rTReD/ZsM+xQcypL4SEzh/h7E=
 golang.org/x/net v0.8.0 h1:Zrh2ngAOFYneWTAIAPethzeaQLuHwhuBkuV6ZiRnUaQ=
 golang.org/x/net v0.8.0/go.mod h1:QVkue5JL9kW//ek3r6jTKnTFis1tRmNAW2P1shuFdJc=
 golang.org/x/sys v0.6.0 h1:MVltZSvRTcU2ljQOhs94SXPftV6DCNnZViHeQps87pQ=

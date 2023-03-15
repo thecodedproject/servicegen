@@ -33,14 +33,14 @@ type TestClientGRPCSuite struct {
 
 func (ts *TestClientLocalSuite) SetupTest() {
 
-	ts.createClient = func(r resources.Resources) basic.Client {
+	ts.createClient = func(r resources.Resources) nested.Client {
 		return client_local.New(r)
 	}
 }
 
 func (ts *TestClientGRPCSuite) SetupTest() {
 
-	ts.createClient = func(r resources.Resources) basic.Client {
+	ts.createClient = func(r resources.Resources) nested.Client {
 		return setupGRPCClient(ts.T(), r)
 	}
 }

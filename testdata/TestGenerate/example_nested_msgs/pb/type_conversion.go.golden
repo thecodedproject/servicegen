@@ -1,0 +1,104 @@
+package pb
+
+import (
+	nested "github.com/thecodedproject/servicegen/example_nested_msgs"
+)
+
+func MsgAFromProto(v *MsgA) nested.MsgA {
+
+	if v == nil {
+		return nested.MsgA{}
+	}
+
+	return nested.MsgA{
+		A: v.A,
+	}
+}
+
+func MsgAToProto(v nested.MsgA) *MsgA {
+
+	return &MsgA{
+		A: v.A,
+	}
+}
+
+func MsgBFromProto(v *MsgB) nested.MsgB {
+
+	if v == nil {
+		return nested.MsgB{}
+	}
+
+	return nested.MsgB{
+		B: v.B,
+	}
+}
+
+func MsgBToProto(v nested.MsgB) *MsgB {
+
+	return &MsgB{
+		B: v.B,
+	}
+}
+
+func MsgCFromProto(v *MsgC) nested.MsgC {
+
+	if v == nil {
+		return nested.MsgC{}
+	}
+
+	return nested.MsgC{
+		C: v.C,
+	}
+}
+
+func MsgCToProto(v nested.MsgC) *MsgC {
+
+	return &MsgC{
+		C: v.C,
+	}
+}
+
+func MsgDFromProto(v *MsgD) nested.MsgD {
+
+	if v == nil {
+		return nested.MsgD{}
+	}
+
+	return nested.MsgD{
+		A: MsgAFromProto(v.A),
+		B: MsgBFromProto(v.B),
+		C: v.C,
+	}
+}
+
+func MsgDToProto(v nested.MsgD) *MsgD {
+
+	return &MsgD{
+		A: MsgAToProto(v.A),
+		B: MsgBToProto(v.B),
+		C: v.C,
+	}
+}
+
+func MsgEFromProto(v *MsgE) nested.MsgE {
+
+	if v == nil {
+		return nested.MsgE{}
+	}
+
+	return nested.MsgE{
+		C: MsgCFromProto(v.C),
+		D: MsgDFromProto(v.D),
+		F: v.F,
+	}
+}
+
+func MsgEToProto(v nested.MsgE) *MsgE {
+
+	return &MsgE{
+		C: MsgCToProto(v.C),
+		D: MsgDToProto(v.D),
+		F: v.F,
+	}
+}
+

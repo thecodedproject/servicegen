@@ -4,6 +4,8 @@ import (
 	"github.com/iancoleman/strcase"
 	"github.com/thecodedproject/gopkg"
 	"github.com/thecodedproject/gopkg/tmpl"
+
+	"github.com/thecodedproject/servicegen/internal/proto"
 )
 
 func fileServerGrpcServer(
@@ -98,7 +100,8 @@ func makeServerFuncs(
 			),
 		)
 
-		f.Receiver.VarName = "s"
+		serverVarName := "_s"
+		f.Receiver.VarName = serverVarName
 		f.Receiver.TypeName = "grpcServer"
 		f.Receiver.IsPointer = true
 
@@ -114,31 +117,37 @@ func makeServerFuncs(
 
 		f.BodyData = struct{
 			PbAlias string
-			RespName string
-			ReqArgNames []string
-			RespArgNames []string
+			Req proto.Message
+			Resp proto.Message
 		}{
 			PbAlias: s.PbImport.Alias,
-			RespName: respMessage.Name,
-			ReqArgNames: reqMessage.FieldNames(),
-			RespArgNames: respMessage.FieldNames(),
+			Req: reqMessage,
+			Resp: respMessage,
 		}
 		f.BodyTmpl = `
-
-	{{range .BodyData.RespArgNames}}{{ToLowerCamel .}}, {{end}}err := internal.{{.Name}}(
+{{- $pbAlias := .BodyData.PbAlias}}
+	{{range .BodyData.Resp.Fields}}{{ToLowerCamel .Name}}, {{end}}err := internal.{{.Name}}(
 		ctx,
-		s.r,
-{{- range .BodyData.ReqArgNames}}
-		req.{{ToCamel .}},
+		` + serverVarName + `.r,
+{{- range .BodyData.Req.Fields}}
+	{{- if .IsNestedMessage}}
+		{{$pbAlias}}.{{ToCamel .Type}}FromProto(req.{{ToCamel .Name}}),
+	{{- else}}
+		req.{{ToCamel .Name}},
+	{{- end}}
 {{- end}}
 	)
 	if err != nil {
 		return nil, err
 	}
 
-	return &{{.BodyData.PbAlias}}.{{.BodyData.RespName}}{
-{{- range .BodyData.RespArgNames}}
-		{{ToCamel .}}: {{ToLowerCamel .}},
+	return &{{.BodyData.PbAlias}}.{{.BodyData.Resp.Name}}{
+{{- range .BodyData.Resp.Fields}}
+	{{- if .IsNestedMessage}}
+		{{ToCamel .Name}}: {{$pbAlias}}.{{ToCamel .Type}}ToProto({{ToLowerCamel .Name}}),
+	{{- else }}
+		{{ToCamel .Name}}: {{ToLowerCamel .Name}},
+	{{- end}}
 {{- end}}
 	}, nil
 `

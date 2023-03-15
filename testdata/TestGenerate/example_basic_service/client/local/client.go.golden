@@ -17,27 +17,27 @@ func New(r resources.Resources) *client {
 	}
 }
 
-func (c *client) Ping(ctx context.Context) (string, error) {
+func (_c *client) Ping(ctx context.Context) (string, error) {
 
 	return internal.Ping(
 		ctx,
-		c.r,
+		_c.r,
 	)
 }
 
-func (c *client) Echo(
+func (_c *client) Echo(
 	ctx context.Context,
 	reqMessage string,
 ) (string, error) {
 
 	return internal.Echo(
 		ctx,
-		c.r,
+		_c.r,
 		reqMessage,
 	)
 }
 
-func (c *client) UseManyTypes(
+func (_c *client) UseManyTypes(
 	ctx context.Context,
 	one int32,
 	two int64,
@@ -49,7 +49,7 @@ func (c *client) UseManyTypes(
 
 	return internal.UseManyTypes(
 		ctx,
-		c.r,
+		_c.r,
 		one,
 		two,
 		three,

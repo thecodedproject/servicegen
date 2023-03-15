@@ -20,38 +20,36 @@ func New(r resources.Resources) *grpcServer {
 	}
 }
 
-func (s *grpcServer) LoneNest(
+func (_s *grpcServer) LoneNest(
 	ctx context.Context,
 	req *pb.LoneNestRequest,
 ) (*pb.LoneNestResponse, error) {
 
-
 	b, err := internal.LoneNest(
 		ctx,
-		s.r,
-		req.A,
+		_s.r,
+		pb.MsgAFromProto(req.A),
 	)
 	if err != nil {
 		return nil, err
 	}
 
 	return &pb.LoneNestResponse{
-		B: b,
+		B: pb.MsgBToProto(b),
 	}, nil
 }
 
-func (s *grpcServer) SeveralParams(
+func (_s *grpcServer) SeveralParams(
 	ctx context.Context,
 	req *pb.SeveralParamsRequest,
 ) (*pb.SeveralParamsResponse, error) {
 
-
 	a, b, err := internal.SeveralParams(
 		ctx,
-		s.r,
+		_s.r,
 		req.A,
-		req.B,
-		req.C,
+		pb.MsgAFromProto(req.B),
+		pb.MsgCFromProto(req.C),
 		req.D,
 	)
 	if err != nil {
@@ -59,28 +57,27 @@ func (s *grpcServer) SeveralParams(
 	}
 
 	return &pb.SeveralParamsResponse{
-		A: a,
-		B: b,
+		A: pb.MsgAToProto(a),
+		B: pb.MsgBToProto(b),
 	}, nil
 }
 
-func (s *grpcServer) MultiDepth(
+func (_s *grpcServer) MultiDepth(
 	ctx context.Context,
 	req *pb.MultiDepthRequest,
 ) (*pb.MultiDepthResponse, error) {
 
-
 	a, err := internal.MultiDepth(
 		ctx,
-		s.r,
-		req.A,
+		_s.r,
+		pb.MsgDFromProto(req.A),
 	)
 	if err != nil {
 		return nil, err
 	}
 
 	return &pb.MultiDepthResponse{
-		A: a,
+		A: pb.MsgEToProto(a),
 	}, nil
 }
 
